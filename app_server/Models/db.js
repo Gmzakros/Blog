@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 require('./blogs');
 var gracefulShutdown;
 
-var dbURI = 'mongodb://localhost/Blogs';
+var dbURI = 'mongodb+srv://Blogs:bq2ZUhLqDXOs4Kmu@blogs.b1anixw.mongodb.net/?retryWrites=true&w=majority';
 mongoose.connect(dbURI);
 
 
@@ -10,7 +10,6 @@ mongoose.connect(dbURI);
 mongoose.connection.on('connected', function () {
     console.log('Mongoose connected to ' + dbURI);
 });
-
 // Monitor and report error connecting to database
 mongoose.connection.on('error', function (err) {
     console.log('Mongoose connection error: ' + err);
