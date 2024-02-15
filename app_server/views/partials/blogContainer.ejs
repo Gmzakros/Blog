@@ -3,12 +3,43 @@
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <div class="blogListing">
-  <h2>Author: Gaige Zakroski <span class="date">Date: 2/14/2024</span>
+  <h2>Author: <%= blogs[0]['author'] %> <span class="date"><%= blogs[0]['date'] %></span>
   </h2>
   <div class="innerContainer">
-    <h3>RuneScape Bank Value</h3>
-    <p>current Value 125M</p>
+    <h3><%= blogs[0]['blogTitle'] %></h3>
+    <p><%= blogs[0]['blogText'] %></p>
   </div>
-  <button> <i class="material-icons">mode_edit</i> </button>
-  <i class="material-icons">delete</i>
+  <p align = "right" >
+    <a href="../blogEdit"> <button> <i class="material-icons">mode_edit</i> </button></a>
+    <a href="../blogDelete"><button><i class="material-icons">delete</i></button></a>
+  </p>
+  
   </div>
+
+<div class="blogListing">
+  <h2>Author: <%= blogs[1]['author'] %> <span class="date"><%= blogs[1]['date'] %></span>
+  </h2>
+  <div class="innerContainer">
+    <h3><%= blogs[1]['blogTitle'] %></h3>
+    <p><%= blogs[1]['blogText'] %></p>
+  </div>
+  <p align = "right" >
+    <a href="../blogEdit"> <button> <i class="material-icons">mode_edit</i> </button></a>
+    <a href="../blogDelete"><button><i class="material-icons">delete</i></button></a>
+  </p>
+  
+  </div>
+
+  <div class="blogListing">
+    <h2>Author: <%= blogs[2]['author'] %> <span class="date"><%= blogs[2]['date'] %></span>
+    </h2>
+    <div class="innerContainer">
+      <h3><%= blogs[2]['blogTitle'] %></h3>
+      <p><%= blogs[2]['blogText'] %></p>
+    </div>
+    <p align = "right" >
+      <a href="../blogEdit"> <button> <i class="material-icons">mode_edit</i> </button></a>
+      <a href="../blogDelete"><button><i class="material-icons">delete</i></button></a>
+    </p>
+    
+    </div>

@@ -7,6 +7,8 @@ router.get('/', home.home);
 router.get('/home', home.home);
 router.get('/blogAdd', blog.blogAdd);
 router.get('/blogList', blog.blogList);
+router.get('/blogDelete', blog.blogDelete);
+router.get('/blogEdit', blog.blogEdit);
 
 module.exports = router;
 
