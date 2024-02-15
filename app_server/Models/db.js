@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-require('./blogs');
+
 var gracefulShutdown;
 
 var dbURI = 'mongodb+srv://Blogs:bq2ZUhLqDXOs4Kmu@blogs.b1anixw.mongodb.net/?retryWrites=true&w=majority';
@@ -47,3 +47,5 @@ process.on('SIGTERM', function () {
         process.exit(0);
     });
 });
+
+require('./blogs');
