@@ -7,7 +7,7 @@ var sendJSONresponse = function (res, status, content) {
 
 module.exports.blogsCreate = function (req, res) {
     console.log(req.body);
-    blogs.create({
+    Blogs.create({
         author: req.body.author,
         blogTitle: req.body.blogTitle,
         blogText: req.body.blogText,
@@ -27,7 +27,7 @@ module.exports.blogsReadOne = function (req, res) {
     console.log('Finding blog details', req.params);
     if (req.params && req.params.blogid) {
         Blogs
-            .findById(req.params.blogid)
+            .findById({_id: req.params.blogid})
             .exec(function (err, blog) {
                 if (!blog) {
                     sendJSONresponse(res, 404, {
@@ -39,7 +39,7 @@ module.exports.blogsReadOne = function (req, res) {
                     sendJSONresponse(res, 404, err);
                     return;
                 }
-                console.log(blog);
+                console.log(blog.blogText);
                 sendJSONresponse(res, 200, blog);
             });
     } else {
@@ -124,18 +124,19 @@ module.exports.blogsList = function(req, res) {
             return;
           }
           console.log(results);
-          sendJSONresponse(res, 200, buildLocationList(req, res, results));
+          sendJSONresponse(res, 200, buildBlogList(req, res, results));
         }); 
   };
   
-  var buildLocationList = function(req, res, results) {
+  var buildBlogList = function(req, res, results) {
     var blogs = [];
     results.forEach(function(obj) {
       blogs.push({
-        name: obj.name,
-        address: obj.address,
-        rating: obj.rating,
-        _id: obj._id
+        _id: obj._id,
+        author: obj.author,
+        blogTitle: obj.blogTitle,
+        blogText: obj.blogText,
+        date: obj.date
       });
     });
     return blogs;

@@ -7,4 +7,5 @@ var reviewSchema = new mongoose.Schema({
     date: String
 });
 
-mongoose.model('Blog', reviewSchema);  
+const Blog = mongoose.model('Blog', reviewSchema);  
+module.exports = Blog;

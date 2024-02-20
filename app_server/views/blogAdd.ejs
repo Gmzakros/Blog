@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-
-<head>
     <%- include('./style'); %>
+    <script type = "text/javascript" src="../../app_api/controllers/blogs.js"></script>  
+  </head>
         <title>
             <%= title %>
         </title>
@@ -19,7 +19,17 @@
         <span class="tab"> </span>
         <%= title %>
     </h1>
-    <p><span class="tab2"> </span>Blog feature is under construction.</p>
+    <p><span class="tab2"> </span> <form action="/api/blogs" method="PUT">
+        <label for="Author"> Author</label><br>
+        <input type="text" id="Author" name="Author"><br>
+        <label for="bTitle"> Blog title</label><br>
+        <input type="text" id="bTitle" name="bTitle"><br>
+        <label for="bText"> Blog Text</label><br>
+        <input type="text" id="bText" name="bText"><br>
+        <label for="date"> date</label><br>
+        <input type="text" id="date" name="date"><br>
+        <input type= "submit" id="submit"> </input>
+    </form></p>
 </body>
 
 </html>
