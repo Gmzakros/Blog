@@ -6,3 +6,5 @@ var reviewSchema = new mongoose.Schema({
     blogText: String,
     date: String
 });
+
+mongoose.model('Blog', reviewSchema);  

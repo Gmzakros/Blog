@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var ctrlLocations = require('../controllers/blogs');
+var ctrlBlogs = require('../controllers/blogs');
 
-router.get('/blogs', ctrlLocations.locationsListByDistance);
-router.post('/blogs', ctrlLocations.locationsCreate);
-router.get('/blogs/:blogid', ctrlLocations.locationsReadOne);
-router.put('/blogs/:blogid', ctrlLocations.locationsUpdateOne);
-router.delete('/blogs/:blogid', ctrlLocations.locationsDeleteOne);
+router.post('/blogs', ctrlBlogs.blogsCreate);
+router.get('/blogs/:blogid', ctrlBlogs.blogsReadOne);
+router.put('/blogs/:blogid', ctrlBlogs.blogsUpdateOne);
+router.delete('/blogs/:blogid', ctrlBlogs.blogsDeleteOne);
 
 module.exports = router;
