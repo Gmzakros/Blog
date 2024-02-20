@@ -105,3 +105,38 @@ module.exports.blogsDeleteOne = function (req, res) {
         });
     }
 };
+
+
+/* GET a list of all blogs */
+module.exports.blogsList = function(req, res) {
+    console.log('Getting blogs list');
+    Blogs
+        .find()
+        .exec(function(err, results) {
+          if (!results) {
+            sendJSONresponse(res, 404, {
+              "message": "no blogs found"
+            });
+            return;
+          } else if (err) {
+            console.log(err);
+            sendJSONresponse(res, 404, err);
+            return;
+          }
+          console.log(results);
+          sendJSONresponse(res, 200, buildLocationList(req, res, results));
+        }); 
+  };
+  
+  var buildLocationList = function(req, res, results) {
+    var blogs = [];
+    results.forEach(function(obj) {
+      blogs.push({
+        name: obj.name,
+        address: obj.address,
+        rating: obj.rating,
+        _id: obj._id
+      });
+    });
+    return blogs;
+  };
