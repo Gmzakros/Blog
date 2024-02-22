@@ -1,35 +1,40 @@
 <!DOCTYPE html>
 <html>
-    <%- include('./style'); %>
-    <script type = "text/javascript" src="../../app_api/controllers/blogs.js"></script>  
-  </head>
-        <title>
-            <%= title %>
-        </title>
-        <div class="topnav">
-            <a href="/home">My Blog</a>
-            <a  href="/blogList">List Blogs</a>
-            <a class="active" href="/blogAdd">Add Blogs</a>
-        </div>
-        </div>
-</head>
-
-<body>
-    <h1>
-        <span class="tab"> </span>
+<%- include('./style'); %>
+    <script> src = "../Controllers/blog.js"</script>
+    </head>
+    <title>
         <%= title %>
-    </h1>
-    <p><span class="tab2"> </span> <form action="/api/blogs" method="PUT">
-        <label for="Author"> Author</label><br>
-        <input type="text" id="Author" name="Author"><br>
-        <label for="bTitle"> Blog title</label><br>
-        <input type="text" id="bTitle" name="bTitle"><br>
-        <label for="bText"> Blog Text</label><br>
-        <input type="text" id="bText" name="bText"><br>
-        <label for="date"> date</label><br>
-        <input type="text" id="date" name="date"><br>
-        <input type= "submit" id="submit"> </input>
-    </form></p>
-</body>
+    </title>
+    <div class="topnav">
+        <a href="/home">My Blog</a>
+        <a href="/blogList">List Blogs</a>
+        <a class="active" href="/blogAdd">Add Blogs</a>
+    </div>
+    </div>
+    </head>
+
+    <body>
+        <h1>
+            <span class="tab"> </span>
+            <%= title %>
+        </h1>
+        <p><span class="tab2"> </span>
+        <form method="post" action='api/blogs'>
+            <label for="Author"> Author</label><br>
+            <input type="text" id="Author" name="Author"><br>
+            <label for="bTitle"> Blog title</label><br>
+            <input type="text" id="bTitle" name="bTitle"><br>
+            <label for="bText"> Blog Text</label><br>
+            <input type="text" id="bText" name="bText"><br>
+            <label for="date"> date</label><br>
+            <input type="text" id="date" name="date"><br>
+            <input type="submit" id="submit">submit </input>
+        </form>
+        </p>
+        <script>
+
+        </script>
+    </body>
 
 </html>
