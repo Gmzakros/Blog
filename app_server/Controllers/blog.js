@@ -36,14 +36,14 @@ module.exports.blogAdd = function (req, res) {
 };
 
 module.exports.addPost = function (req, res) {
-  var requestOptions, path, postdata;
+  var requestOptions, path, blogid, postdata;
   path = '/api/blogs/';
   console.log("here");
   postdata = {
-    author: req.Author,
-    blogTitle: req.bTitle,
-    blogText: req.bText,
-    date: req.date
+    author: req.body.Author,
+    blogTitle: req.body.bTitle,
+    blogText: req.body.bText,
+    date: req.body.date
   };
   console.log(postdata);
 
@@ -52,8 +52,9 @@ module.exports.addPost = function (req, res) {
     method: "POST",
     json: postdata
   };
-  if (!postdata.author || !postdata.blogTitle || !postdata.blogText || !postdata.data) {
-    res.redirect('/blogAdd/');
+  console.log(requestOptions.url);
+  if (!postdata.author || !postdata.blogTitle || !postdata.blogText || !postdata.date) {
+    res.redirect('/blogList');
   }
   else {
     request(
@@ -61,7 +62,8 @@ module.exports.addPost = function (req, res) {
       function (err, response, body) {
         if (response.statusCode === 201) {
           res.redirect('/blogList');
-        } else {
+        } 
+        else {
           _showError(req, res, response.statusCode);
         }
       }

@@ -9,12 +9,9 @@ var sendJSONresponse = function (res, status, content) {
 module.exports.blogsCreate = function (req, res) {
     console.log("help me");
     console.log(req.body);
-    Blogs.create({
-        author: req.body.Author,
-        blogTitle: req.body.bTitle,
-        blogText: req.body.bText,
-        date: req.body.date
-    }, function (err, blog) {
+    Blogs.create( req.body
+        
+    , function (err, blog) {
         if (err) {
             console.log(err);
             sendJSONresponse(res, 400, err);
