@@ -11,7 +11,18 @@
         <a href="/blogList">List Blogs</a>
         <a class="active" href="/blogAdd">Add Blogs</a>
     </div>
-    </div>
+    <script>
+        window.onload = function() {
+            var form = document.querySelector('.blogAddForm');
+            form.addEventListener('keypress', function(event) {
+                // Check if the Enter key was pressed
+                if (event.key === 'Enter') {
+                    // Prevent the default form submission behavior
+                    event.preventDefault();
+                }
+            });
+        };
+    </script>
     </head>
 
     <body>
@@ -20,21 +31,18 @@
             <%= title %>
         </h1>
         <p><span class="tab2"> </span>
-        <form method="POST" action="/blogAdd/">
-            <label for="Author"> Author</label><br>
-            <input type="text" id="Author" name="Author"><br>
-            <label for="bTitle"> Blog title</label><br>
-            <input type="text" id="bTitle" name="bTitle"><br>
+        <div class="blogAdd">
+        <form class="blogAddForm" method="POST" action="/blogAdd/">
+            <label  for="Author">Author</label><br>
+            <input class="username"type="text" id="Author" name="Author" autocomplete="off"><br>
+            <label  for="bTitle"> Blog title</label><br>
+            <input class="username" type="text" id="bTitle" name="bTitle" autocomplete="off"><br>
             <label for="bText"> Blog Text</label><br>
-            <input type="text" id="bText" name="bText"><br>
-            <label for="date"> date</label><br>
-            <input type="text" id="date" name="date"><br>
-            <input type="submit" id="submit">submit </input>
+            <textarea class= "blogText" type="text" id="bText" name="bText"></textarea><br>
+            <input class= "submit"type="submit" id="submit"> </input>
         </form>
+    </div>
         </p>
-        <script>
-
-        </script>
     </body>
 
 </html>

@@ -39,11 +39,12 @@ module.exports.addPost = function (req, res) {
   var requestOptions, path, blogid, postdata;
   path = '/api/blogs/';
   console.log("here");
+  let today = new Date();
   postdata = {
     author: req.body.Author,
     blogTitle: req.body.bTitle,
     blogText: req.body.bText,
-    date: req.body.date
+    date: `${today.getMonth() + 1}-${today.getDate()}-${today.getFullYear()}`
   };
   console.log(postdata);
 
