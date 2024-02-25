@@ -7,7 +7,9 @@ router.get('/', home.home);
 router.get('/home', home.home);
 router.get('/blogAdd', blog.blogAdd);
 router.get('/blogList', blog.blogList);
-router.get('/blogDelete', blog.blogDelete);
+router.post('/blogDelete/:blogid', blog.deletePost);
+router.get('/blogDelete/:blogid', blog.del);
+
 router.get('/blogEdit', blog.blogEdit);
 router.post('/blogAdd', blog.addPost);
 

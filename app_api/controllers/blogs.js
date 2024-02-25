@@ -39,7 +39,6 @@ module.exports.blogsReadOne = function (req, res) {
                     sendJSONresponse(res, 404, err);
                     return;
                 }
-                console.log(blog.blogText);
                 sendJSONresponse(res, 200, blog);
             });
     } else {
@@ -84,10 +83,9 @@ module.exports.blogsUpdateOne = function (req, res) {
 }
     ;
 module.exports.blogsDeleteOne = function (req, res) {
-    var blogid = req.params.blogid;
-    if (blogid) {
+    console.log("Deleting book entry with id of " + req.params.blogid);
         Blogs
-            .findByIdAndRemove(blogid)
+            .findByIdAndRemove(req.params.blogid)
             .exec(
                 function (err, blog) {
                     if (err) {
@@ -95,15 +93,10 @@ module.exports.blogsDeleteOne = function (req, res) {
                         sendJSONresponse(res, 404, err);
                         return;
                     }
-                    console.log("blog id " + blogid + " deleted");
+                    console.log("blog id " + req.params.blogid + " deleted");
                     sendJSONresponse(res, 204, null);
                 }
             );
-    } else {
-        sendJSONresponse(res, 404, {
-            "message": "No blogid"
-        });
-    }
 };
 
 
