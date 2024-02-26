@@ -7,22 +7,10 @@ router.get('/', home.home);
 router.get('/home', home.home);
 router.get('/blogAdd', blog.blogAdd);
 router.get('/blogList', blog.blogList);
-router.get('/blogDelete', blog.blogDelete);
-router.get('/blogEdit', blog.blogEdit);
+router.post('/blogDelete/:blogid', blog.deletePost);
+router.get('/blogDelete/:blogid', blog.del);
+router.post('/blogEdit/:blogid', blog.editPost);
+router.get('/blogEdit/:blogid', blog.blogEdit);
+router.post('/blogAdd', blog.addPost);
 
 module.exports = router;
-
-
-
-/*
-
-var express = require('express');
-var router = express.Router();
-var ctrlHome = require('../controllers/home');
-var ctrlContact = require('../controllers/contact');
-
- Setup routes to pages
-router.get('/', ctrlHome.home);
-router.get('/contact', ctrlContact.contact);
-
-module.exports = router;              */

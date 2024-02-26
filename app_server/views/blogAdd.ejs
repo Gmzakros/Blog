@@ -1,25 +1,48 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <%- include('./style'); %>
-        <title>
-            <%= title %>
-        </title>
-        <div class="topnav">
-            <a href="/home">My Blog</a>
-            <a  href="/blogList">List Blogs</a>
-            <a class="active" href="/blogAdd">Add Blogs</a>
-        </div>
-        </div>
-</head>
-
-<body>
-    <h1>
-        <span class="tab"> </span>
+<%- include('./style'); %>
+    <script> src = "../Controllers/blog.js"</script>
+    </head>
+    <title>
         <%= title %>
-    </h1>
-    <p><span class="tab2"> </span>Blog feature is under construction.</p>
-</body>
+    </title>
+    <div class="topnav">
+        <a href="/home">My Blog</a>
+        <a href="/blogList">List Blogs</a>
+        <a class="active" href="/blogAdd">Add Blogs</a>
+    </div>
+    <script>
+        window.onload = function() {
+            var form = document.querySelector('.blogAddForm');
+            form.addEventListener('keypress', function(event) {
+                // Check if the Enter key was pressed
+                if (event.key === 'Enter') {
+                    // Prevent the default form submission behavior
+                    event.preventDefault();
+                }
+            });
+        };
+    </script>
+    </head>
+
+    <body>
+        <h1>
+            <span class="tab"> </span>
+            <%= title %>
+        </h1>
+        <p><span class="tab2"> </span>
+        <div class="blogAdd">
+        <form class="blogAddForm" method="POST" action="/blogAdd/">
+            <label  for="Author">Author</label><br>
+            <input class="username"type="text" id="Author" name="Author" autocomplete="off"><br>
+            <label  for="bTitle"> Blog title</label><br>
+            <input class="username" type="text" id="bTitle" name="bTitle" autocomplete="off"><br>
+            <label for="bText"> Blog Text</label><br>
+            <textarea class= "blogText" type="text" id="bText" name="bText"></textarea><br>
+            <input class= "submit"type="submit" id="submit"> </input>
+        </form>
+    </div>
+        </p>
+    </body>
 
 </html>

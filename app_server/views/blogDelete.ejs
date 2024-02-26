@@ -1,25 +1,40 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <%- include('./style'); %>
-        <title>
-            <%= title %>
-        </title>
-        <div class="topnav">
-            <a href="/home">My Blog</a>
-            <a class="active" href="/blogList">List Blogs</a>
-            <a href="/blogAdd">Add Blogs</a>
-        </div>
-        </div>
-</head>
-
-<body>
-    <h1>
-        <span class="tab"> </span>
+<%- include('./style'); %>
+    <script> src = "../Controllers/blog.js"</script>
+    </head>
+    <title>
         <%= title %>
-    </h1>
-    <p><span class="tab2"> </span>Blog feature is under construction.</p>
-</body>
+    </title>
+    <div class="topnav">
+        <a href="/home">My Blog</a>
+        <a class="active" href="/blogList">List Blogs</a>
+        <a href="/blogAdd">Add Blogs</a>
+    </div>
+    </head>
+
+    <body>
+        <h1>
+            <span class="tab"> </span>
+            <%= title %>
+        </h1>
+        <p><span class="tab2"> </span>
+        <div class="blogAdd">
+        <form class="blogAddForm" method="POST" action="/blogDelete/<%= blog['_id']%>/">
+            <label  for="Author" >Author</label><br>
+            <input class="username"type="text" id="Author"  name="Author" autocomplete="off" readonly value='<%= blog['author'] %>'><br>
+            
+            <label  for="bTitle"> Blog title</label><br>
+            <input class="username" type="text" id="bTitle" name="bTitle" autocomplete="off" readonly value='<%= blog['blogTitle'] %>'><br>
+            
+            <label for="bText"value="Non-editable Text" readonly> Blog Text</label><br>
+            
+            <textarea class= "blogText" type="text" id="bText" name="bText" readonly ><%= blog['blogText'] %></textarea><br>
+            <a class="cancel" href="/bloglist" role="button">Cancel</a>
+            <input class="submit" type="submit" value="Delete" style="font-family: Arial, Helvetica, sans-serif;">
+        </form>
+    </div>
+        </p>
+    </body>
 
 </html>
