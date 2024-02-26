@@ -72,9 +72,65 @@ module.exports.addPost = function (req, res) {
   }
 };
 
-module.exports.blogEdit = function (req, res) {
-  res.render("blogEdit", { title: 'Edit Blog' });
+
+module.exports.blogEdit = function(req, res) {
+  var requestOptions, path;
+  path = "/api/blogs/" + req.params.blogid;
+  console.log(path);
+    requestOptions = {
+      url : apiOptions.server + path,
+      method : "GET",
+      json : {}
+  }; 
+  request(
+      requestOptions,
+      function(err, response, body) {
+              renderEditPage(req, res, body);
+      }
+  );
 };
+
+
+/* Render the book edit page */
+var renderEditPage = function(req, res, responseBody){
+  res.render("blogEdit", { title: 'Edit Blog', 
+                           blog: responseBody });
+};
+
+
+/* Book Edit Post */
+module.exports.editPost = function(req, res){
+  console.log("Update blog");
+  var requestOptions, path, postdata;
+  var id = req.params.blogid;
+  path = '/api/blogs/' + id;
+  let today = new Date();
+  postdata = {
+    author: req.body.Author,
+    blogTitle: req.body.bTitle,
+    blogText: req.body.bText,
+    date: `${today.getMonth() + 1}-${today.getDate()}-${today.getFullYear()}`
+  };
+
+  requestOptions = {
+      url : apiOptions.server + path,
+      method : "PUT",
+      json : postdata
+  };
+
+  request(
+requestOptions,
+      function(err, response, body) {
+          if (response.statusCode === 200) {
+              res.redirect('/blogList');
+          } else {
+              _showError(req, res, response.statusCode);
+          }
+      }
+  );
+};
+
+
 
 
 var renderDeletePage = function(req, res, responseBody){

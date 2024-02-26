@@ -49,6 +49,7 @@ module.exports.blogsReadOne = function (req, res) {
     }
 };
 module.exports.blogsUpdateOne = function (req, res) {
+    console.log('Updating', req.params);
     if (!req.params.blogid) {
         sendJSONresponse(res, 404, {
             "Message": "Not Found, blogid is required"
@@ -56,7 +57,6 @@ module.exports.blogsUpdateOne = function (req, res) {
         return;
     }
     Blogs.findById(req.params.blogid)
-        .select('-blogTitle -blogText')
         .exec(
             function (err, blog) {
                 if (!blog) {
@@ -67,6 +67,7 @@ module.exports.blogsUpdateOne = function (req, res) {
                     sendJSONresponse(res, 400, err);
                     return;
                 }
+                blog.author = req.body.author;
                 blog.blogTitle = req.body.blogTitle;
                 blog.blogText = req.body.blogText;
                 blog.blogDate = req.body.date;
@@ -75,6 +76,7 @@ module.exports.blogsUpdateOne = function (req, res) {
                         sendJSONresponse(res, 404, err);
                     }
                     else {
+                        console.log("success")
                         sendJSONresponse(res, 200, blog);
                     }
                 });
