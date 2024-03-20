@@ -1,7 +1,7 @@
-<style>
-  body{
+  body {
     font-family: "Arial"
   }
+
   .topnav {
     background-color: #ac2424;
     overflow: hidden;
@@ -48,8 +48,8 @@
     font-size: medium;
   }
 
-  .blogListing{
-    background-color:  #ac2424;
+  .blogListing {
+    background-color: #ac2424;
     color: #ddd;
     min-width: 550px;
     min-height: 200px;
@@ -61,12 +61,13 @@
     padding-bottom: 10px;
     font-size: 8pt;
     border-radius: 15px;
-    
+
     max-width: 800px;
     max-height: 400px;
   }
-  .innerContainer{
-    background-color:  #16bec49c;
+
+  .innerContainer {
+    background-color: #16bec49c;
     font-size: 13pt;
     border-radius: 15px;
     padding-left: 15px;
@@ -74,33 +75,35 @@
     min-height: 120px;
   }
 
-  .innerContainer p{
+  .innerContainer p {
     margin-top: -10px;
   }
 
-  .innerContainer h3::after{
-    content:' ';
-    display:block;
-    border:1px solid #16bec4;
-}
-.date{
-  text-align: right;
-  padding-left: 75%;
-}
-.material-icons{
-  align-self: self-end;
-  color: #ddd;
-}
+  .innerContainer h3::after {
+    content: ' ';
+    display: block;
+    border: 1px solid #16bec4;
+  }
 
-button{
-  background: none;
-  border: none;
-  cursor: pointer;
-  align-self: right;
-}
+  .date {
+    text-align: right;
+    padding-left: 75%;
+  }
 
-.blogAdd{
-  background-color:  #ac2424;
+  .material-icons {
+    align-self: self-end;
+    color: #ddd;
+  }
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    align-self: right;
+  }
+
+  .blogAdd {
+    background-color: #ac2424;
     color: #ddd;
     min-width: 300px;
     min-height: 200px;
@@ -112,84 +115,84 @@ button{
     padding-bottom: 10px;
     font-size: 8pt;
     border-radius: 15px;
-    
+
     max-width: 600px;
     max-height: 700px;
-}
+  }
 
-label{
-  font-size: 16pt;
-}
-.username{
-  height: 50px;
-  width: 590px;
-  font-size: large;
-  border-radius: 15px;
-  background-color: #16bec49c;
-  color: #ddd;
-  border: 0px;
-  
-}
-.blogText{
-  height: 250px;
-  width: 590px;
-  border-radius: 15px;
-  background-color: #16bec49c;
-  color: #ddd;
-  border: 0px;
-  font-size: 14pt;
-  max-height: 680px;
-  max-width: 590px;
-}
+  label {
+    font-size: 16pt;
+  }
 
-.submit{
-  background-color: #16bec49c;
-  color: #ddd;
-  border: 0px;
-  border-radius: 15px;
-  height: 40px;
-  width: 65px;
-  font-size: 12pt;
-  font-family: Arial;
-  align-items: right;
-  margin-top: 10px;
-  
-}
+  .username {
+    height: 50px;
+    width: 590px;
+    font-size: large;
+    border-radius: 15px;
+    background-color: #16bec49c;
+    color: #ddd;
+    border: 0px;
 
-.cancel{
-  background-color: #16bec49c;
-  color: #ddd;
-  border: 0px;
-  border-radius: 15px;
-  height: 50px;
-  width: 65px;
-  padding: 10px;
-  font-size: 12pt;
-  margin-left: 40%;
-  margin-right: 10px;
-  text-decoration: none;
-  margin-left: 70%;
-  margin-top: 20px;
-  
-}
+  }
 
-h2 {
+  .blogText {
+    height: 250px;
+    width: 590px;
+    border-radius: 15px;
+    background-color: #16bec49c;
+    color: #ddd;
+    border: 0px;
+    font-size: 14pt;
+    max-height: 680px;
+    max-width: 590px;
+  }
+
+  .submit {
+    background-color: #16bec49c;
+    color: #ddd;
+    border: 0px;
+    border-radius: 15px;
+    height: 40px;
+    width: 65px;
+    font-size: 12pt;
+    font-family: Arial;
+    align-items: right;
+    margin-top: 10px;
+
+  }
+
+  .cancel {
+    background-color: #16bec49c;
+    color: #ddd;
+    border: 0px;
+    border-radius: 15px;
+    height: 50px;
+    width: 65px;
+    padding: 10px;
+    font-size: 12pt;
+    margin-left: 40%;
+    margin-right: 10px;
+    text-decoration: none;
+    margin-left: 70%;
+    margin-top: 20px;
+
+  }
+
+  h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
     white-space: nowrap;
     overflow: hidden;
-}
+  }
 
-.author {
+  .author {
     max-width: 100px;
     flex-grow: 1;
-    margin-right: 10px; /* Adjust as needed */
-}
+    margin-right: 10px;
+    /* Adjust as needed */
+  }
 
-.date {
+  .date {
     flex-shrink: 0;
-}
-
-
-</style>
+  }

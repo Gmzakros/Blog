@@ -1,0 +1,41 @@
+<!doctype html>
+<html ng-app="blogApp">
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<head>
+    <script src="/lib/angular.min.js"></script>
+    <script src="/lib/angular-route.min.js"></script>
+    <div class="topnav" id="navbar">
+        <a class="active" href="#!/home" id="homeTab">My Blog</a>
+        <a class='' href="#!/blogList" id="blogListTab">List Blogs</a>
+        <a class='' href="#!/blogAdd" id="blogAddTab">Add Blogs</a>
+    </div>
+    <!-- Include your stylesheet directly here -->
+</head>
+
+<body>
+
+    <!-- Navigation -->
+
+    <!-- Angular Templates -->
+    <script type="text/ng-template" id="pages/home.html">
+        <p></p>
+        <h2>{{vm.pageHeader.title}}</h2>
+        <h4>{{vm.message}}</h4>
+    </script>
+
+    <script type="text/ng-template" id="pages/blogList.html">
+    <h2>{{vm.pageHeader.title}}</h2>
+    <h4>{{vm.message}}</h4>
+    </script>
+
+    <div ng-view></div>
+    <!-- <script src="/js/your-custom-script.js"></script> -->
+    <script src="bloggerApp.js"></script>
+
+
+
+</body>
+
+
+</html>
