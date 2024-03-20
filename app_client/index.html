@@ -6,7 +6,7 @@
     <script src="/lib/angular.min.js"></script>
     <script src="/lib/angular-route.min.js"></script>
     <div class="topnav" id="navbar">
-        <a  href="#!/home" id="homeTab">My Blog</a>
+        <a href="#!/home" id="homeTab">My Blog</a>
         <a href="#!/blogList" id="blogListTab">List Blogs</a>
         <a href="#!/blogAdd" id="blogAddTab">Add Blogs</a>
     </div>
@@ -14,7 +14,7 @@
 
 <body>
 
-    
+
     <script type="text/ng-template" id="pages/home.html">
         <p></p>
         <h2>{{vm.pageHeader.title}}</h2>
@@ -41,10 +41,20 @@
     </script>
 
     <script type="text/ng-template" id="pages/blogAdd.html">
-        <h2>{{vm.pageHeader.title}}</h2>
-        <h4>{{vm.message}}</h4>
+        <p><div class="blogAdd">
+            <form class="blogAddForm" method="POST">
+                <label  for="Author">Author</label><br>
+                <input class="username"type="text" id="Author" ng-model="Author" name="Author" autocomplete="off"><br>
+                <label  for="bTitle"> Blog title</label><br>
+                <input class="username" type="text" id="bTitle" ng-model="bTitle" name="bTitle" autocomplete="off"><br>
+                <label for="bText"> Blog Text</label><br>
+                <textarea class= "blogText" type="text" id="bText" ng-model="bText" name="bText"></textarea><br>
+                <input class= "submit"type="submit" id="submit" ng-click= 'submit();'> 
+            </form>
+        </div>
+            </p>
         </script>
-    
+
     <div ng-view></div>
     <!-- <script src="/js/your-custom-script.js"></script> -->
     <script src="bloggerApp.js"></script>

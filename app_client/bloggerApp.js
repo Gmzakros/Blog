@@ -37,14 +37,12 @@ app.controller('BlogListController', function BlogListController($scope, $http) 
     vm.message = "Loading blog list...";
 
     $http.get('/api/blogs')
-        .then(function(response) {
-            // Success callback
+        .then(function (response) {
             vm.blogs = response.data;
-            vm.message = ""; 
+            vm.message = "";
         })
-        .catch(function(error) {
-            // Error callback
-            vm.message = "Error loading blog list"; // Display error message
+        .catch(function (error) {
+            vm.message = "Error loading blog list";
             console.error("Error loading blog list:", error);
         });
 });
@@ -57,5 +55,12 @@ app.controller('BlogAddController', function BlogListController($scope, $locatio
     };
     vm.message = "Add a Blog";
 
+
+
+
+});
+
+app.controller('FormCtrl', function ($scope, $http) {
+    console.log($scope.Author);
 });
 
