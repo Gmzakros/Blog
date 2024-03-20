@@ -6,18 +6,15 @@
     <script src="/lib/angular.min.js"></script>
     <script src="/lib/angular-route.min.js"></script>
     <div class="topnav" id="navbar">
-        <a class="active" href="#!/home" id="homeTab">My Blog</a>
-        <a class='' href="#!/blogList" id="blogListTab">List Blogs</a>
-        <a class='' href="#!/blogAdd" id="blogAddTab">Add Blogs</a>
+        <a  href="#!/home" id="homeTab">My Blog</a>
+        <a href="#!/blogList" id="blogListTab">List Blogs</a>
+        <a href="#!/blogAdd" id="blogAddTab">Add Blogs</a>
     </div>
-    <!-- Include your stylesheet directly here -->
 </head>
 
 <body>
 
-    <!-- Navigation -->
-
-    <!-- Angular Templates -->
+    
     <script type="text/ng-template" id="pages/home.html">
         <p></p>
         <h2>{{vm.pageHeader.title}}</h2>
@@ -25,10 +22,29 @@
     </script>
 
     <script type="text/ng-template" id="pages/blogList.html">
-    <h2>{{vm.pageHeader.title}}</h2>
-    <h4>{{vm.message}}</h4>
+        <div style="padding-top: 20px;">
+        <div ng-repeat="blog in vm.blogs" class="blogListing">
+            <h2>
+                <span class="author">{{ blog.author }}</span>
+                <span class="date">{{ blog.date }}</span>
+            </h2>
+            <div class="innerContainer">
+                <h3>{{ blog.blogTitle }}</h3>
+                <p>{{ blog.blogText }}</p>
+            </div>
+            <p align="right">
+                <a ng-href="../blogEdit{{ blog._id }}"> <button> <i class="material-icons">edit</i> </button></a>
+                <a ng-href="../blogDelete{{ blog._id }}"><button><i class="material-icons">delete</i></button></a>
+            </p>
+        </div>
+        
     </script>
 
+    <script type="text/ng-template" id="pages/blogAdd.html">
+        <h2>{{vm.pageHeader.title}}</h2>
+        <h4>{{vm.message}}</h4>
+        </script>
+    
     <div ng-view></div>
     <!-- <script src="/js/your-custom-script.js"></script> -->
     <script src="bloggerApp.js"></script>

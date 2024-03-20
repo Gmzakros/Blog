@@ -28,13 +28,34 @@ app.controller('HomeController', function HomeController() {
     vm.message = "Welcome to my blog site!";
 });
 
-app.controller('BlogListController', function HomeController() {
+
+app.controller('BlogListController', function BlogListController($scope, $http) {
     var vm = this;
     vm.pageHeader = {
-        title: "BlogList"
+        title: "Blog List"
     };
-    vm.message = "this is a blog list";
+    vm.message = "Loading blog list...";
 
-    var ele = document.getElementById("navbar");
-    console.log(ele.className);
+    $http.get('/api/blogs')
+        .then(function(response) {
+            // Success callback
+            vm.blogs = response.data;
+            vm.message = ""; 
+        })
+        .catch(function(error) {
+            // Error callback
+            vm.message = "Error loading blog list"; // Display error message
+            console.error("Error loading blog list:", error);
+        });
 });
+
+
+app.controller('BlogAddController', function BlogListController($scope, $location) {
+    var vm = this;
+    vm.pageHeader = {
+        title: "BlogAdd"
+    };
+    vm.message = "Add a Blog";
+
+});
+
