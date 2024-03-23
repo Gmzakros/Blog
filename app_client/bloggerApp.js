@@ -17,7 +17,18 @@ app.config(function ($routeProvider) {
             controller: 'BlogAddController', // Assuming you have a corresponding controller
             controllerAs: 'vm'
         })
-        .otherwise({ redirectTo: '/home' });
+        .when('/blogEdit/:blogId', {
+            templateUrl: 'pages/blogEdit.html', // Assuming you have a blog add page
+            controller: 'BlogEditController', // Assuming you have a corresponding controller
+            controllerAs: 'vm'
+        })
+        .when('/blogDelete/:blogId', {
+            templateUrl: 'pages/blogDelete.html', // Assuming you have a blog add page
+            controller: 'BlogDeleteController', // Assuming you have a corresponding controller
+            controllerAs: 'vm'
+        })
+        
+        
 });
 
 app.controller('HomeController', function HomeController() {
@@ -48,19 +59,97 @@ app.controller('BlogListController', function BlogListController($scope, $http) 
 });
 
 
-app.controller('BlogAddController', function BlogListController($scope, $location) {
+app.controller('BlogAddController', function BlogListController($scope, $location, $http) {
     var vm = this;
     vm.pageHeader = {
         title: "BlogAdd"
     };
     vm.message = "Add a Blog";
 
-
+    $scope.submit = function() {
+        let today = new Date();
+        var blogData = {
+            author: $scope.Author,
+            blogTitle: $scope.bTitle,
+            blogText: $scope.bText, 
+            date: `${today.getMonth() + 1}-${today.getDate()}-${today.getFullYear()}`
+        };
+        
+        $http.post('/api/blogs', blogData)
+            .then(function(response) {
+                console.log("Blog added :", response.data);
+                $location.path('/blogList');
+            })
+            .catch(function(error) {
+                console.error("Error adding blog:", error);
+            });
+    };
 
 
 });
 
-app.controller('FormCtrl', function ($scope, $http) {
-    console.log($scope.Author);
+app.controller('BlogEditController', function BlogEditController($http, $routeParams, $scope,$location) {
+    var vm = this;
+    vm.pageHeader = {
+        title: "Blog Edit"
+    };
+    vm.message = "Edit a blog";
+    vm.blogId = $routeParams.blogId;
+
+    $http.get('/api/blogs/' + vm.blogId)
+        .then(function (response) {
+            vm.blog = response.data;
+            vm.message = "";
+        })
+        .catch(function (error) {
+            vm.message = "Error loading blog";
+            console.error("Error loading blog:", error);
+        });
+    
+    $scope.editBlog = function() {
+        $http.put('/api/blogs/' + vm.blogId, vm.blog) 
+            .then(function(response) {
+                console.log("Blog updated:", response.data);
+                $location.path('/blogList');
+            })
+            .catch(function(error) {
+                console.error("Error updating blog:", error);
+                });
+        };
 });
+
+app.controller('BlogDeleteController', function($http, $routeParams, $scope, $location) {
+    var vm = this;
+    vm.pageHeader = {
+        title: "Blog delete"
+    };
+    vm.message = "delete a blog";
+    vm.blogId = $routeParams.blogId;
+
+    $http.get('/api/blogs/' + vm.blogId)
+        .then(function(response) {
+            vm.blog = response.data;
+            vm.message = "";
+        })
+        .catch(function(error) {
+            vm.message = "Error loading blog";
+            console.error("Error loading blog:", error);
+        });
+
+    // Function to delete the blog
+    $scope.deleteBlog = function() {
+        $http.delete('/api/blogs/' + vm.blogId)
+            .then(function(response) {
+                console.log("Blog deleted:", response.data);
+                // Redirect to blog list page after successful deletion
+                $location.path('/blogList');
+            })
+            .catch(function(error) {
+                console.error("Error deleting blog:", error);
+                // Handle error, show user-friendly message if needed
+            });
+    };
+});
+
+
 

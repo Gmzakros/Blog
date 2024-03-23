@@ -44,7 +44,9 @@
     display: inline-block;
     margin-left: 4em;
   }
-
+  .AuthorName
+  {
+  }
   p {
     font-size: medium;
   }
@@ -62,7 +64,6 @@
     padding-bottom: 10px;
     font-size: 8pt;
     border-radius: 15px;
-
     max-width: 800px;
     max-height: 400px;
   }
@@ -88,7 +89,7 @@
 
   .date {
     text-align: right;
-    padding-left: 75%;
+    padding-left: 60%;
   }
 
   .material-icons {

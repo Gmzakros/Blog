@@ -25,7 +25,7 @@
         <div style="padding-top: 20px;">
         <div ng-repeat="blog in vm.blogs" class="blogListing">
             <h2>
-                <span class="author">{{ blog.author }}</span>
+                <span class="author" id= "AuthorName">{{ blog.author }}</span>
                 <span class="date">{{ blog.date }}</span>
             </h2>
             <div class="innerContainer">
@@ -33,8 +33,8 @@
                 <p>{{ blog.blogText }}</p>
             </div>
             <p align="right">
-                <a ng-href="../blogEdit{{ blog._id }}"> <button> <i class="material-icons">edit</i> </button></a>
-                <a ng-href="../blogDelete{{ blog._id }}"><button><i class="material-icons">delete</i></button></a>
+                <a ng-href="#!/blogEdit/{{ blog._id }}"> <button> <i class="material-icons">edit</i> </button></a>
+                <a href="#!/blogDelete/{{blog._id}}"><button><i class="material-icons">delete</i></button></a>
             </p>
         </div>
         
@@ -42,19 +42,58 @@
 
     <script type="text/ng-template" id="pages/blogAdd.html">
         <p><div class="blogAdd">
-            <form class="blogAddForm" method="POST">
+            <form class="blogAddForm" method="POST" ng-submit="submit()">
                 <label  for="Author">Author</label><br>
                 <input class="username"type="text" id="Author" ng-model="Author" name="Author" autocomplete="off"><br>
                 <label  for="bTitle"> Blog title</label><br>
                 <input class="username" type="text" id="bTitle" ng-model="bTitle" name="bTitle" autocomplete="off"><br>
                 <label for="bText"> Blog Text</label><br>
                 <textarea class= "blogText" type="text" id="bText" ng-model="bText" name="bText"></textarea><br>
-                <input class= "submit"type="submit" id="submit" ng-click= 'submit();'> 
+                <input class= "submit"type="submit" id="submit"> 
             </form>
         </div>
             </p>
         </script>
 
+        <script type="text/ng-template" id="pages/blogEdit.html">
+            <div style="padding-top: 20px;">
+
+                <div class="blogAdd">
+                    <form class="blogAddForm" method="POST" ng-submit="editBlog()">
+                        <label for="Author">Author</label><br>
+                        <input class="username" type="text" id="Author" ng-model="vm.blog.author" name="Author" autocomplete="off"><br>
+                        
+                        <label for="bTitle">Blog title</label><br>
+                        <input class="username" type="text" id="bTitle" ng-model="vm.blog.blogTitle" name="bTitle" autocomplete="off"><br>
+                        
+                        <label for="bText">Blog Text</label><br>
+                        <textarea class="blogText" id="bText" ng-model="vm.blog.blogText" name="bText"></textarea><br>
+                        
+                        <a class="cancel" href="#!/blogList" role="button">Cancel</a>
+                        <input class="submit" type="submit" value="Save" style="font-family: Arial, Helvetica, sans-serif;">
+                    </form>
+                </div>
+        </script>
+
+        <script type="text/ng-template" id="pages/blogDelete.html">
+            <div style="padding-top: 20px;">
+                <div class="blogAdd">
+                    <form class="blogAddForm" method="POST" ng-submit="deleteBlog()">
+                        <label for="Author">Author</label><br>
+                        <input class="username" type="text" id="Author" name="Author" autocomplete="off" readonly ng-model="vm.blog.author"><br>
+                        
+                        <label for="bTitle">Blog title</label><br>
+                        <input class="username" type="text" id="bTitle" name="bTitle" autocomplete="off" readonly ng-model="vm.blog.blogTitle"><br>
+                        
+                        <label for="bText">Blog Text</label><br>
+                        <textarea class="blogText" id="bText" name="bText" readonly>{{vm.blog.blogText}}</textarea><br>
+                        
+                        <a class="cancel" href="#!/blogList" role="button">Cancel</a>
+                        <input class="submit" type="submit" value="Delete" style="font-family: Arial, Helvetica, sans-serif;">
+                    </form>
+                </div>
+        </script>
+    
     <div ng-view></div>
     <!-- <script src="/js/your-custom-script.js"></script> -->
     <script src="bloggerApp.js"></script>
