@@ -3,66 +3,78 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 
 <head>
-    <script src="/lib/angular.min.js"></script>
-    <script src="/lib/angular-route.min.js"></script>
-    <div class="topnav" id="navbar">
-        <a href="#!/home" id="homeTab">My Blog</a>
-        <a href="#!/blogList" id="blogListTab">List Blogs</a>
-        <a href="#!/blogAdd" id="blogAddTab">Add Blogs</a>
-    </div>
+  <script src="/lib/angular.min.js"></script>
+  <script src="/lib/angular-route.min.js"></script>
+
 </head>
 
 <body>
 
+  <div class="topnav" id="navbar" ng-controller="NavbarController">
+    <a href="#!/home" id="homeTab">My Blog</a>
+    <a href="#!/blogList" id="blogListTab">List Blogs</a>
+    <a ng-if="currentUser" href="#!/blogAdd" id="blogAddTab">Add Blogs</a>
+    <div class="navbar-right">
+      <a ng-click="toggleAuth()" ng-if="!currentUser" href="#!/Login">Login</a>
+      <a ng-click="toggleAuth()" ng-if="currentUser">Logout ({{ currentUser.email }})</a>
+    </div>
+  </div>
 
-    <script type="text/ng-template" id="pages/home.html">
-        <p></p>
-        <h2>{{vm.pageHeader.title}}</h2>
-        <h4>{{vm.message}}</h4>
-    </script>
+  <script type="text/ng-template" id="pages/home.html">
+    <div>
+      <p></p>
+      <h2 ng-if="currentUser">{{ currentUser.name }}'s Blogs</h2>
+      <h2 ng-if="!currentUser">{{ vm.pageHeader.title }}</h2>
+      <h4>{{ vm.message }}</h4>
+  </div>
+          </script>
 
     <script type="text/ng-template" id="pages/blogList.html">
-        <div style="padding-top: 20px;">
-        <div ng-repeat="blog in vm.blogs" class="blogListing">
-            <h2>
-                <span class="author" id= "AuthorName">{{ blog.author }}</span>
-                <span class="date">{{ blog.date }}</span>
-            </h2>
-            <div class="innerContainer">
-                <h3>{{ blog.blogTitle }}</h3>
-                <p>{{ blog.blogText }}</p>
-            </div>
-            <p align="right">
-                <a ng-href="#!/blogEdit/{{ blog._id }}"> <button> <i class="material-icons">edit</i> </button></a>
-                <a href="#!/blogDelete/{{blog._id}}"><button><i class="material-icons">delete</i></button></a>
-            </p>
-        </div>
-        
-    </script>
+      <div style="padding-top: 20px;">
+          <div ng-repeat="blog in vm.blogs" class="blogListing">
+              <h2>
+                  <span class="author" id="AuthorName">{{ blog.author }}</span>
+                  <span class="date">{{ blog.date }}</span>
+              </h2>
+              <div class="innerContainer">
+                  <h3>{{ blog.blogTitle }}</h3>
+                  <p>{{ blog.blogText }}</p>
+              </div>
+              <p align="right" ng-if=canEdit(blog);>
+                  <a  href="#!/blogEdit/{{ blog._id }}">
+                    <button id="editBtn"><i class="material-icons">Edit</i></button>
+                  </a>
+                  <a href="#!/blogDelete/{{ blog._id }}">
+                      <button id="deleteBtn" ><i class="material-icons">Delete</i></button>
+                  </a>
+              </p>
+          </div>
+      </div>
+  </script>
+  
 
-    <script type="text/ng-template" id="pages/blogAdd.html">
-        <p><div class="blogAdd">
+
+  <script type="text/ng-template" id="pages/blogAdd.html">
+    <p>
+        <div class="blogAdd">
             <form class="blogAddForm" method="POST" ng-submit="submit()">
-                <label  for="Author">Author</label><br>
-                <input class="username"type="text" id="Author" ng-model="Author" name="Author" autocomplete="off"><br>
-                <label  for="bTitle"> Blog title</label><br>
+                <label for="bTitle">Blog title</label><br>
                 <input class="username" type="text" id="bTitle" ng-model="bTitle" name="bTitle" autocomplete="off"><br>
-                <label for="bText"> Blog Text</label><br>
-                <textarea class= "blogText" type="text" id="bText" ng-model="bText" name="bText"></textarea><br>
-                <input class= "submit"type="submit" id="submit"> 
+                
+                <label for="bText">Blog Text</label><br>
+                <textarea class="blogText" id="bText" ng-model="bText" name="bText"></textarea><br>
+                
+                <input class="submit" type="submit" id="submit">
             </form>
         </div>
-            </p>
-        </script>
+    </p>
+</script>
 
-        <script type="text/ng-template" id="pages/blogEdit.html">
+  <script type="text/ng-template" id="pages/blogEdit.html">
             <div style="padding-top: 20px;">
 
                 <div class="blogAdd">
-                    <form class="blogAddForm" method="POST" ng-submit="editBlog()">
-                        <label for="Author">Author</label><br>
-                        <input class="username" type="text" id="Author" ng-model="vm.blog.author" name="Author" autocomplete="off"><br>
-                        
+                    <form class="blogAddForm" method="POST" ng-submit="editBlog()">   
                         <label for="bTitle">Blog title</label><br>
                         <input class="username" type="text" id="bTitle" ng-model="vm.blog.blogTitle" name="bTitle" autocomplete="off"><br>
                         
@@ -75,13 +87,10 @@
                 </div>
         </script>
 
-        <script type="text/ng-template" id="pages/blogDelete.html">
+  <script type="text/ng-template" id="pages/blogDelete.html">
             <div style="padding-top: 20px;">
                 <div class="blogAdd">
                     <form class="blogAddForm" method="POST" ng-submit="deleteBlog()">
-                        <label for="Author">Author</label><br>
-                        <input class="username" type="text" id="Author" name="Author" autocomplete="off" readonly ng-model="vm.blog.author"><br>
-                        
                         <label for="bTitle">Blog title</label><br>
                         <input class="username" type="text" id="bTitle" name="bTitle" autocomplete="off" readonly ng-model="vm.blog.blogTitle"><br>
                         
@@ -93,10 +102,65 @@
                     </form>
                 </div>
         </script>
+
+        <script type="text/ng-template" id="pages/Login.html">
+          <div class="login-container">
+              <div class="red-box">
+                  <h2>{{ vm.pageHeader.title }}</h2>
+      
+                  <p class="lead">Not a member? Please <a href="/#!/Register">Register</a> instead.</p>
+      
+                  <form name="loginForm" ng-submit="vm.onSubmit()" novalidate>
+                      <div ng-if="vm.formError" class="alert alert-danger">
+                          {{ vm.formError }}
+                      </div>
+                      <div class="form-group">
+                          <label for="email">Email</label><br>
+                          <input type="email" id="email" class="form-control" ng-model="vm.credentials.email" required>
+                      </div>
+                      <div class="form-group">
+                          <label for="password">Password</label><br>
+                          <input type="password" id="password" class="form-control" ng-model="vm.credentials.password" required>
+                      </div>
+                      <button id="login" type="submit" class="btn btn-primary">Login</button>
+                  </form>
+              </div>
+          </div>
+      </script>
+      
+      
+
+      <script type="text/ng-template" id="pages/Register.html">
+        <div class="login-container">
+        <div class="red-box container">
+            <h2>{{ vm.pageHeader.title }}</h2>
     
-    <div ng-view></div>
-    <!-- <script src="/js/your-custom-script.js"></script> -->
-    <script src="bloggerApp.js"></script>
+            <p class="lead">Already a member? Please <a href="/#!/login">log in</a> instead.</p>
+    
+            <form name="registerForm" ng-submit="vm.onSubmit()" novalidate>
+                <div ng-if="vm.formError" class="alert alert-danger">{{ vm.formError }}</div>
+                <div class="form-group">
+                    <label for="name">Full name</label>
+                    <input id=  "usersName" type="text" class="form-control" id="name" placeholder="Enter your name" ng-model="vm.credentials.name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter email" ng-model="vm.credentials.email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Password" ng-model="vm.credentials.password" required>
+                </div>
+                <button id="Register" type="submit" class="btn btn-primary">Register!</button>
+            </form>
+        </div>
+      </div>
+    </script>
+    
+  <div ng-view></div>
+  <!-- <script src="/js/your-custom-script.js"></script> -->
+  <script src="bloggerApp.js"></script>
+
 
 
 

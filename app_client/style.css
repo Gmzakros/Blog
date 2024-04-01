@@ -1,4 +1,3 @@
-  
   body {
     font-family: "Arial"
   }
@@ -28,6 +27,10 @@
     border-radius: 15px;
   }
 
+  a {
+    text-decoration: none;
+  }
+
   /* Add a color to the active/current link */
   .topnav a.active {
     background-color: #16bec49c;
@@ -44,16 +47,16 @@
     display: inline-block;
     margin-left: 4em;
   }
-  .AuthorName
-  {
-  }
+
+  .AuthorName {}
+
   p {
     font-size: medium;
   }
 
   .blogListing {
-    background-color: #ac2424;
-    color: #ddd;
+    border: 1px solid #ac2424; 
+    background-color: #f2dede; 
     min-width: 550px;
     min-height: 200px;
     margin-left: 60px;
@@ -68,8 +71,14 @@
     max-height: 400px;
   }
 
+  #Login,
+  #Logout {
+    float: right;
+  }
+
   .innerContainer {
-    background-color: #16bec49c;
+    background-color: #b4f0f0f1;
+    border: 1px solid #16bec49c; 
     font-size: 13pt;
     border-radius: 15px;
     padding-left: 15px;
@@ -92,21 +101,10 @@
     padding-left: 60%;
   }
 
-  .material-icons {
-    align-self: self-end;
-    color: #ddd;
-  }
-
-  button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    align-self: right;
-  }
 
   .blogAdd {
-    background-color: #ac2424;
-    color: #ddd;
+    border: 1px solid #ac2424; 
+    background-color: #f2dede; 
     min-width: 300px;
     min-height: 200px;
     margin-left: 60px;
@@ -131,28 +129,25 @@
     width: 590px;
     font-size: large;
     border-radius: 15px;
-    background-color: #16bec49c;
-    color: #ddd;
-    border: 0px;
-
+    background-color: #b4f0f0f1;
+    border: 1px solid #16bec49c; 
   }
 
   .blogText {
     height: 250px;
     width: 590px;
     border-radius: 15px;
-    background-color: #16bec49c;
-    color: #ddd;
-    border: 0px;
+    background-color: #b4f0f0f1;
+    border: 1px solid #16bec49c; 
     font-size: 14pt;
     max-height: 680px;
     max-width: 590px;
   }
 
   .submit {
-    background-color: #16bec49c;
-    color: #ddd;
-    border: 0px;
+    background-color: #b4f0f0f1;
+    border-color: #16bec49c;
+    border: 1px;
     border-radius: 15px;
     height: 40px;
     width: 65px;
@@ -164,9 +159,9 @@
   }
 
   .cancel {
-    background-color: #16bec49c;
-    color: #ddd;
-    border: 0px;
+    background-color: #b4f0f0f1;
+    border-color: #16bec49c;
+    border: 1px;
     border-radius: 15px;
     height: 50px;
     width: 65px;
@@ -198,3 +193,127 @@
   .date {
     flex-shrink: 0;
   }
+
+
+  .navbar-right {
+    float: right;
+}
+
+.login-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.login-container {
+  max-width: 400px;
+  margin: 0 auto;
+  margin-top:4%
+}
+
+.red-box {
+  padding: 20px;
+  border: 1px solid #ac2424; 
+  border-radius: 5px;
+  background-color: #f2dede; 
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+  margin-left: 2%;
+}
+
+input[type="email"],
+input[type="password"]
+ {
+  width: 50%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-left: 5%;
+}
+
+#login {
+  display: block;
+  width: 50%;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  background-color: #b4f0f0f1;
+  border-color: #16bec49c;
+  cursor: pointer;
+  margin-left: 25%;
+}
+
+#login:hover {
+  background-color: #16bec49c;
+}
+
+.red-box {
+  max-width: 400px;
+  margin: 0 auto;
+  margin-top: 4%;
+  padding: 20px;
+  border: 1px solid #ac2424;
+  border-radius: 5px;
+  background-color: #f2dede;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+  margin-left: 2%;
+}
+
+input[type="email"],
+input[type="password"],
+#usersName {
+  width: 90%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-left: 5%;
+}
+
+#Register {
+  display: block;
+  width: 90%;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  background-color: #b4f0f0f1;
+  border-color: #16bec49c;
+  cursor: pointer;
+  margin-left: 7.5%;
+}
+
+#Register:hover, .submit:hover,.cancel:hover, #deleteBtn:hover, #editBtn:hover {
+  background-color: #16bec49c;
+}
+#deleteBtn, #editBtn{
+  
+  padding: 10px;
+  font-size: 12px;
+  border-radius: 5px;
+  border:1px;
+  background-color: #b4f0f0f1;
+  border-color: #16bec49c;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+
