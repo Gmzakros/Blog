@@ -37,55 +37,74 @@ app.config(function ($routeProvider) {
             controller: 'RegisterController',
             controllerAs: 'vm'
         })
+        .otherwise({redirectTo: '/home'});
 
 
 });
 
-app.controller('NavbarController', ['$scope', 'authentication', function ($scope, authentication) {
-    $scope.currentUser = authentication.currentUser();
+app.controller('NavbarController', ['$scope', '$location','authentication', function ($scope,  $location, authentication) {
+  var updateCurrentUser = function () {
+      $scope.currentUser = authentication.currentUser();
+  };
 
-    // Watch for changes in the currentUser object
-    $scope.$watch(function () {
-        return authentication.currentUser().email;
-    }, function (newVal) {
-        $scope.currentUserEmail = newVal;
-    });
+  updateCurrentUser();
 
+  $scope.toggleAuth = function () {
+      if ($scope.currentUser) {
+          authentication.logout();
+          $scope.currentUser = null;
+          $location.path('/Login');
+      } else {
+          
+          $location.path('/Login');
+      }
+      
+  };
 
-    $scope.logout = function () {
-        authentication.logout();
-        $scope.currentUser = null;
-    };
+  $scope.$watch(function () {
+    return authentication.currentUser();
+}, function () {
+    updateCurrentUser();
+}, true);
 }]);
 
 
-app.controller('HomeController', function HomeController() {
-    var vm = this;
-    vm.pageHeader = {
-        title: "My Blogs"
-    };
-    vm.message = "Welcome to my blog site!";
+app.controller('HomeController', ['$scope', 'authentication', function HomeController($scope, authentication) {
+  var vm = this;
+  vm.currentUser = authentication.currentUser();
+  $scope.currentUser = vm.currentUser;
+
+  console.log($scope.currentUser);
+  vm.pageHeader = {
+      title: "My Blogs"
+  };
+  vm.message = "Welcome to my blog site!";
+
+}]);
+
+
+app.controller('BlogListController', function BlogListController($scope, $http, authentication) {
+  var vm = this;
+  vm.pageHeader = {
+      title: "Blog List"
+  };
+  vm.message = "Loading blog list...";
+  vm.currentUser = authentication.currentUser(); // Get the current user
+
+  $http.get('/api/blogs')
+      .then(function (response) {
+          vm.blogs = response.data;
+          vm.message = "";
+      })
+      .catch(function (error) {
+          vm.message = "Error loading blog list";
+          console.error("Error loading blog list:", error);
+      });
+
+  $scope.canEdit = function (blog) {
+      return blog.author === vm.currentUser.email;
+  };
 });
-
-
-app.controller('BlogListController', function BlogListController($scope, $http) {
-    var vm = this;
-    vm.pageHeader = {
-        title: "Blog List"
-    };
-    vm.message = "Loading blog list...";
-
-    $http.get('/api/blogs')
-        .then(function (response) {
-            vm.blogs = response.data;
-            vm.message = "";
-        })
-        .catch(function (error) {
-            vm.message = "Error loading blog list";
-            console.error("Error loading blog list:", error);
-        });
-});
-
 
 app.controller('BlogAddController', ['$scope', '$location', '$http', 'authentication', function ($scope, $location, $http, authentication) {
     var vm = this;
@@ -93,21 +112,19 @@ app.controller('BlogAddController', ['$scope', '$location', '$http', 'authentica
         title: "BlogAdd"
     };
     vm.message = "Add a Blog";
-
+    vm.currentUser = authentication.currentUser();
     $scope.submit = function () {
         let today = new Date();
         var blogData = {
-            author: $scope.author,
+            author: vm.currentUser.email,
             blogTitle: $scope.bTitle,
             blogText: $scope.bText,
             date: `${today.getMonth() + 1}-${today.getDate()}-${today.getFullYear()}`
         };
         console.log(blogData);
 
-        // Retrieve the user token from local storage
         var token = authentication.getToken();
 
-        // Set up headers with the user token
         var config = {
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -127,13 +144,14 @@ app.controller('BlogAddController', ['$scope', '$location', '$http', 'authentica
 
 
 
-app.controller('BlogEditController', function BlogEditController($http, $routeParams, $scope, $location) {
+app.controller('BlogEditController', function BlogEditController($http, $routeParams, $scope, $location, authentication) {
     var vm = this;
     vm.pageHeader = {
         title: "Blog Edit"
     };
     vm.message = "Edit a blog";
     vm.blogId = $routeParams.blogId;
+        vm.currentUser = authentication.currentUser();
 
     $http.get('/api/blogs/' + vm.blogId)
         .then(function (response) {
@@ -146,7 +164,15 @@ app.controller('BlogEditController', function BlogEditController($http, $routePa
         });
 
     $scope.editBlog = function () {
-        $http.put('/api/blogs/' + vm.blogId, vm.blog)
+
+      var token = authentication.getToken();
+
+        var config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        };
+        $http.put('/api/blogs/' + vm.blogId, vm.blog, config)
             .then(function (response) {
                 console.log("Blog updated:", response.data);
                 $location.path('/blogList');
@@ -154,40 +180,58 @@ app.controller('BlogEditController', function BlogEditController($http, $routePa
             .catch(function (error) {
                 console.error("Error updating blog:", error);
             });
+            
     };
 });
 
-app.controller('BlogDeleteController', function ($http, $routeParams, $scope, $location) {
-    var vm = this;
-    vm.pageHeader = {
-        title: "Blog delete"
-    };
-    vm.message = "delete a blog";
-    vm.blogId = $routeParams.blogId;
+app.controller('BlogDeleteController', function ($http, $routeParams, $scope, $location, authentication) {
+  var vm = this;
+  vm.pageHeader = {
+      title: "Blog delete"
+  };
+  vm.message = "delete a blog";
+  vm.blogId = $routeParams.blogId;
+  vm.currentUser = authentication.currentUser(); // Get the current user
+  
+  // Retrieve the blog post to delete
+  $http.get('/api/blogs/' + vm.blogId)
+      .then(function (response) {
+          vm.blog = response.data;
+          vm.message = "";
+      })
+      .catch(function (error) {
+          vm.message = "Error loading blog";
+          console.error("Error loading blog:", error);
+      });
 
-    $http.get('/api/blogs/' + vm.blogId)
-        .then(function (response) {
-            vm.blog = response.data;
-            vm.message = "";
-        })
-        .catch(function (error) {
-            vm.message = "Error loading blog";
-            console.error("Error loading blog:", error);
-        });
+  // Function to delete the blog
+  $scope.deleteBlog = function () {
 
-    // Function to delete the blog
-    $scope.deleteBlog = function () {
-        $http.delete('/api/blogs/' + vm.blogId)
-            .then(function (response) {
-                console.log("Blog deleted:", response.data);
-                // Redirect to blog list page after successful deletion
-                $location.path('/blogList');
-            })
-            .catch(function (error) {
-                console.error("Error deleting blog:", error);
-                // Handle error, show user-friendly message if needed
-            });
-    };
+    var token = authentication.getToken();
+
+        var config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        };
+      $http.delete('/api/blogs/' + vm.blogId,config)
+          .then(function (response) {
+              console.log("Blog deleted:", response.data);
+              // Redirect to blog list page after successful deletion
+              $location.path('/blogList');
+          })
+          .catch(function (error) {
+              console.error("Error deleting blog:", error);
+              // Handle error, show user-friendly message if needed
+          });
+         
+  };
+
+  // Function to check if the current user can delete this blog post
+  $scope.canDelete = function () {
+      if (!vm.blog || !vm.currentUser) return false; // If no blog or user, cannot delete
+      return vm.blog.author === vm.currentUser.email; // Return true if the current user is the author of the blog
+  };
 });
 
 
@@ -217,24 +261,27 @@ app.controller('LoginController', ['$scope', '$location', 'authentication', func
     };
 
     vm.doLogin = function () {
-        vm.formError = "";
-        authentication
-            .login(vm.credentials)
-            .catch(function (err) {
-                vm.formError = err.message;
-            })
-            .then(function () {
+      vm.formError = "";
+      authentication
+          .login(vm.credentials)
+          .then(function () {
+              $location.search('page', null);
+              $location.path(vm.returnPage);
+          })
+          .catch(function (err) {
+              vm.formError = "Invalid Username or Password, try again.";
+              // Optionally, you can clear the credentials to prevent auto-fill
+              vm.credentials.email = "";
+              vm.credentials.password = "";
+          });
+  };
 
-                $location.search('page', null);
-                $location.path(vm.returnPage);
-            });
-    };
 
-    $scope.$watch(function () {
-        return authentication.currentUser();
-    }, function (newVal) {
-        $scope.currentUser = newVal;
-    });
+  $scope.$watch(function () {
+    return authentication.currentUser();
+}, function () {
+    updateCurrentUser();
+}, true);
 }]);
 
 app.controller('RegisterController', ['$http', '$location', 'authentication', function RegisterController($htttp, $location, authentication) {
@@ -242,7 +289,6 @@ app.controller('RegisterController', ['$http', '$location', 'authentication', fu
     vm.pageHeader = {
         title: 'Create a new Blooger account'
     };
-
     vm.credentials = {
         name: "",
         email: "",
@@ -265,15 +311,19 @@ app.controller('RegisterController', ['$http', '$location', 'authentication', fu
         vm.formError = "";
         authentication
             .register(vm.credentials)
-            .catch(function (err) {
-                vm.formError = "Error registering. Try again with a different email address."
-                //vm.formError = err;
-            })
             .then(function () {
                 $location.search('page', null);
-                $location.path(vm.returnPage);
                 vm.registrationSuccess = true;
+            })
+            .catch(function (err) {
+                console.log("in error");
+                vm.formError = "Error registering. Try again with a different email address."
+                //vm.formError = err;
             });
+
+            $location.path('/Login');
+
+            
     };
 }]);
 
@@ -308,18 +358,20 @@ function authentication($window, $http) {
     var login = function (user) {
         console.log('Attempting to login user ' + user.email + ' ' + user.password);
         return $http.post('/api/login', user).then(function (response) {
-            saveToken(response.data.token); // Save the token from the response
-            saveUser(user);
-            return response.data; // Return the entire response data
+            saveToken(response.data.token); 
+            saveUser(response.data.user); 
+
+            return response.data; 
         }).catch(function (error) {
-            // Handle errors, log or display error messages
+            
             console.error('Error logging in:', error);
-            throw error; // Rethrow the error for the caller to handle
+            throw error;
         });
     };
 
     var logout = function () {
         $window.localStorage.removeItem('blog-token');
+
     };
 
     var isLoggedIn = function () {
