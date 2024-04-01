@@ -314,6 +314,7 @@ app.controller('RegisterController', ['$http', '$location', 'authentication', fu
             .then(function () {
                 $location.search('page', null);
                 vm.registrationSuccess = true;
+                $location.path('/Login');
             })
             .catch(function (err) {
                 console.log("in error");
@@ -321,7 +322,6 @@ app.controller('RegisterController', ['$http', '$location', 'authentication', fu
                 //vm.formError = err;
             });
 
-            $location.path('/Login');
 
             
     };
