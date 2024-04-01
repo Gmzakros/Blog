@@ -67,7 +67,9 @@
     max-width: 800px;
     max-height: 400px;
   }
-
+  #Login{
+    float: right;
+  }
   .innerContainer {
     background-color: #16bec49c;
     font-size: 13pt;

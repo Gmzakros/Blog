@@ -1,5 +1,14 @@
 var app = angular.module('bloggerApp');
+console.log("here");
+app.config(function ($routeProvider) {
+  $routeProvider
+      .when('/Login', {
 
+          templateUrl: 'pages/Login.html',
+          controller: 'LoginController',
+          controllerAs: 'vm'
+      })
+    });
 //*** Authentication Service and Methods **
 app.service('authentication', authentication);
     authentication.$inject = ['$window', '$http'];
@@ -11,6 +20,9 @@ app.service('authentication', authentication);
                                        
         var getToken = function () {
             return $window.localStorage['blog-token'];
+        };
+        var saveUser = function(user){
+          $window.localStorage['blog-user'] = JSON.stringify(user);
         };
         
         var register = function(user) {
@@ -25,6 +37,7 @@ app.service('authentication', authentication);
            //$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
             return $http.post('/api/login', user).success(function(data) {
               saveToken(data.token);
+              saveUser(user);
            });
         };
         
@@ -54,7 +67,7 @@ app.service('authentication', authentication);
             };
           }
         };
-
+          console.log(currentUser);
         return {
           saveToken : saveToken,
           getToken : getToken,
@@ -66,44 +79,46 @@ app.service('authentication', authentication);
         };
 }
 
-app.controller('LoginController', [ '$http', '$location', 'authentication', function LoginController($htttp, $location, authentication) {
-    var vm = this;
+app.controller('LoginController', ['$http', '$location', 'authentication', function LoginController($htttp, $location, authentication) {
+  var vm = this;
 
-    vm.pageHeader = {
-      title: 'Sign in to Blogger'
-    };
+  vm.pageHeader = {
+    title: 'Sign in to Blogger'
+  };
 
-    vm.credentials = {
-      email : "",
-      password : ""
-    };
+  vm.credentials = {
+    email : "",
+    password : ""
+  };
 
-    vm.returnPage = $location.search().page || '/';
+  vm.returnPage = $location.search().page || '/';
 
-    vm.onSubmit = function () {
-      vm.formError = "";
-      if (!vm.credentials.email || !vm.credentials.password) {
-           vm.formError = "All fields required, please try again";
-        return false;
-      } else {
-           vm.doLogin();
-      }
-    };
+  vm.onSubmit = function () {
+    vm.formError = "";
+    if (!vm.credentials.email || !vm.credentials.password) {
+         vm.formError = "All fields required, please try again";
+      return false;
+    } else {
+         vm.doLogin();
+    }
+  };
 
-    vm.doLogin = function() {
-      vm.formError = "";
-      authentication
-        .login(vm.credentials)
-        .error(function(err){
-          var obj = err;
-          vm.formError = obj.message;
-        })
-        .then(function(){
-          $location.search('page', null); 
-          $location.path(vm.returnPage);
-        });
-    };
- }]);
+  vm.doLogin = function() {
+    vm.formError = "";
+    authentication
+      .login(vm.credentials)
+      .error(function(err){
+        var obj = err;
+        vm.formError = obj.message;
+      })
+      .then(function(){
+        $location.search('page', null); 
+        $location.path(vm.returnPage);
+        vm.user = authentication.currentUser();
+      });
+  };
+}]);
+
 
 app.controller('RegisterController', [ '$http', '$location', 'authentication', function RegisterController($htttp, $location, authentication) {
     var vm = this;
@@ -144,3 +159,25 @@ app.controller('RegisterController', [ '$http', '$location', 'authentication', f
         });
     };
 }]); 
+
+
+function YourController($scope, authentication) {
+  // Now you can access the methods and properties of the authentication service
+  // For example:
+  $scope.token = authentication.getToken();
+  $scope.currentUser = authentication.currentUser();
+  
+  // You can call other methods as well like login, register, logout, etc.
+  
+  // Example usage of isLoggedIn
+  $scope.isLoggedIn = authentication.isLoggedIn();
+  
+  // Example usage of saveUser and getUser
+  $scope.saveUser = function(user) {
+      authentication.saveUser(user);
+  };
+
+  $scope.getUser = function() {
+      return authentication.getUser();
+  };
+}

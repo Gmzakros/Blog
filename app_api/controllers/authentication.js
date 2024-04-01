@@ -50,6 +50,7 @@ module.exports.login = function(req, res) {
 
     if (user) {
       var token = user.generateJwt();
+      console.log(token);
       sendJSONresponse(res, 200, {
         "token": token
       });
