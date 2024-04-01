@@ -3,62 +3,68 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 
 <head>
-    <script src="/lib/angular.min.js"></script>
-    <script src="/lib/angular-route.min.js"></script>
-    <div class="topnav" id="navbar">
-        <a href="#!/home" id="homeTab">My Blog</a>
-        <a href="#!/blogList" id="blogListTab">List Blogs</a>
-        <a href="#!/blogAdd" id="blogAddTab">Add Blogs</a>
-        <a ng-show="vm.user" id="loggedInUser"></a>
-        <a href="#!/Login" id="Login"> Login</a>
-    </div>
-    
+  <script src="/lib/angular.min.js"></script>
+  <script src="/lib/angular-route.min.js"></script>
+
 </head>
 
 <body>
 
+  <div class="topnav" id="navbar" ng-controller="NavbarController">
+    <a href="#!/home" id="homeTab">My Blog</a>
+    <a href="#!/blogList" id="blogListTab">List Blogs</a>
+    <a href="#!/blogAdd" id="blogAddTab">Add Blogs</a>
+    <a ng-if="!currentUser" href="#!/Login" id="Login">Login</a>
+    <a ng-if="currentUser" id="Logout" ng-click="logout()" id="Logout">({{ currentUser.email }}) Logout</a>
+  </div>
 
-    <script type="text/ng-template" id="pages/home.html">
+  <script type="text/ng-template" id="pages/home.html">
         <p></p>
         <h2>{{vm.pageHeader.title}}</h2>
         <h4>{{vm.message}}</h4>
+        <h4> {{vm.name}}</h4>
     </script>
 
-    <script type="text/ng-template" id="pages/blogList.html">
-        <div style="padding-top: 20px;">
-        <div ng-repeat="blog in vm.blogs" class="blogListing">
-            <h2>
-                <span class="author" id= "AuthorName">{{ blog.author }}</span>
-                <span class="date">{{ blog.date }}</span>
-            </h2>
-            <div class="innerContainer">
-                <h3>{{ blog.blogTitle }}</h3>
-                <p>{{ blog.blogText }}</p>
-            </div>
-            <p align="right">
-                <a ng-href="#!/blogEdit/{{ blog._id }}"> <button> <i class="material-icons">edit</i> </button></a>
-                <a href="#!/blogDelete/{{blog._id}}"><button><i class="material-icons">delete</i></button></a>
-            </p>
-        </div>
-        
-    </script>
+  <script type="text/ng-template" id="pages/blogList.html">
+      <div style="padding-top: 20px;">
+          <div ng-repeat="blog in vm.blogs" class="blogListing">
+              <h2>
+                  <span class="author" id="AuthorName">{{ blog.author }}</span>
+                  <span class="date">{{ blog.date }}</span>
+              </h2>
+              <div class="innerContainer">
+                  <h3>{{ blog.blogTitle }}</h3>
+                  <p>{{ blog.blogText }}</p>
+              </div>
+              <p align="right" ng-if="currentUser && currentUser.email === blog.author">
+                  <a ng-href="#!/blogEdit/{{ blog._id }}"> <button> <i class="material-icons">edit</i> </button></a>
+                  <a href="#!/blogDelete/{{blog._id}}"><button><i class="material-icons">delete</i></button></a>
+              </p>
+          </div>
+      </div>
+  </script>
 
-    <script type="text/ng-template" id="pages/blogAdd.html">
-        <p><div class="blogAdd">
+
+  <script type="text/ng-template" id="pages/blogAdd.html">
+    <p>
+        <div class="blogAdd">
             <form class="blogAddForm" method="POST" ng-submit="submit()">
-                <label  for="Author">Author</label><br>
-                <input class="username"type="text" id="Author" ng-model="Author" name="Author" autocomplete="off"><br>
-                <label  for="bTitle"> Blog title</label><br>
+                <label for="Author">Author</label><br>
+                <input class="username" type="text" id="Author" ng-model= "author" name="Author" autocomplete="off"><br>
+                
+                <label for="bTitle">Blog title</label><br>
                 <input class="username" type="text" id="bTitle" ng-model="bTitle" name="bTitle" autocomplete="off"><br>
-                <label for="bText"> Blog Text</label><br>
-                <textarea class= "blogText" type="text" id="bText" ng-model="bText" name="bText"></textarea><br>
-                <input class= "submit"type="submit" id="submit"> 
+                
+                <label for="bText">Blog Text</label><br>
+                <textarea class="blogText" id="bText" ng-model="bText" name="bText"></textarea><br>
+                
+                <input class="submit" type="submit" id="submit">
             </form>
         </div>
-            </p>
-        </script>
+    </p>
+</script>
 
-        <script type="text/ng-template" id="pages/blogEdit.html">
+  <script type="text/ng-template" id="pages/blogEdit.html">
             <div style="padding-top: 20px;">
 
                 <div class="blogAdd">
@@ -78,7 +84,7 @@
                 </div>
         </script>
 
-        <script type="text/ng-template" id="pages/blogDelete.html">
+  <script type="text/ng-template" id="pages/blogDelete.html">
             <div style="padding-top: 20px;">
                 <div class="blogAdd">
                     <form class="blogAddForm" method="POST" ng-submit="deleteBlog()">
@@ -97,7 +103,7 @@
                 </div>
         </script>
 
-        <script type="text/ng-template" id="pages/Login.html">
+  <script type="text/ng-template" id="pages/Login.html">
             <div class="container">
                 <page-header content="vm.pageHeader"></page-header>
               
@@ -123,7 +129,7 @@
               </div>
         </script>
 
-        <script type="text/ng-template" id="pages/Register.html">
+  <script type="text/ng-template" id="pages/Register.html">
             <div class="container">
                 <page-header content="vm.pageHeader"></page-header>
               
@@ -146,18 +152,17 @@
                       </div>
                       <button type="submit" class="btn btn-default">Register!</button>
                     </form>
-                    <p ng-show="vm.registrationSuccess">Welcome, {{ vm.credentials.name }}! You have successfully registered.</p>
                   </div>
                 </div>
               
                 <footer-generic></footer-generic>
               </div>
         </script>
-        
-    <div ng-view></div>
-    <!-- <script src="/js/your-custom-script.js"></script> -->
-    <script src="bloggerApp.js"></script>
-    
+
+  <div ng-view></div>
+  <!-- <script src="/js/your-custom-script.js"></script> -->
+  <script src="bloggerApp.js"></script>
+
 
 
 
