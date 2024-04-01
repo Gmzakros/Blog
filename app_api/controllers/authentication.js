@@ -24,7 +24,7 @@ module.exports.register = function (req, res) {
 
   user.save(function (err) {
     if (err) {
-      sendJSONresponse(res, 500, err); // Changed status code to 500 for server error
+      sendJSONresponse(res, 500, err); 
       return;
     }
     var token = user.generateJwt();
@@ -46,7 +46,7 @@ module.exports.login = function (req, res) {
     if (err) {
       console.log("err");
 
-      sendJSONresponse(res, 500, err); // Changed status code to 500 for server error
+      sendJSONresponse(res, 500, err); 
       return;
     }
 

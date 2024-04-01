@@ -8,23 +8,23 @@ app.config(function ($routeProvider) {
             controllerAs: 'vm'
         })
         .when('/blogList', {
-            templateUrl: 'pages/blogList.html', // Assuming you have a blog list page
-            controller: 'BlogListController', // Assuming you have a corresponding controller
+            templateUrl: 'pages/blogList.html', 
+            controller: 'BlogListController',
             controllerAs: 'vm'
         })
         .when('/blogAdd', {
-            templateUrl: 'pages/blogAdd.html', // Assuming you have a blog add page
-            controller: 'BlogAddController', // Assuming you have a corresponding controller
+            templateUrl: 'pages/blogAdd.html', 
+            controller: 'BlogAddController', 
             controllerAs: 'vm'
         })
         .when('/blogEdit/:blogId', {
-            templateUrl: 'pages/blogEdit.html', // Assuming you have a blog add page
-            controller: 'BlogEditController', // Assuming you have a corresponding controller
+            templateUrl: 'pages/blogEdit.html',
+            controller: 'BlogEditController', 
             controllerAs: 'vm'
         })
         .when('/blogDelete/:blogId', {
-            templateUrl: 'pages/blogDelete.html', // Assuming you have a blog add page
-            controller: 'BlogDeleteController', // Assuming you have a corresponding controller
+            templateUrl: 'pages/blogDelete.html', 
+            controller: 'BlogDeleteController', 
             controllerAs: 'vm'
         })
         .when('/Login', {
@@ -89,7 +89,7 @@ app.controller('BlogListController', function BlogListController($scope, $http, 
       title: "Blog List"
   };
   vm.message = "Loading blog list...";
-  vm.currentUser = authentication.currentUser(); // Get the current user
+  vm.currentUser = authentication.currentUser();
 
   $http.get('/api/blogs')
       .then(function (response) {
@@ -191,9 +191,8 @@ app.controller('BlogDeleteController', function ($http, $routeParams, $scope, $l
   };
   vm.message = "delete a blog";
   vm.blogId = $routeParams.blogId;
-  vm.currentUser = authentication.currentUser(); // Get the current user
+  vm.currentUser = authentication.currentUser(); 
   
-  // Retrieve the blog post to delete
   $http.get('/api/blogs/' + vm.blogId)
       .then(function (response) {
           vm.blog = response.data;
@@ -204,7 +203,6 @@ app.controller('BlogDeleteController', function ($http, $routeParams, $scope, $l
           console.error("Error loading blog:", error);
       });
 
-  // Function to delete the blog
   $scope.deleteBlog = function () {
 
     var token = authentication.getToken();
@@ -217,20 +215,19 @@ app.controller('BlogDeleteController', function ($http, $routeParams, $scope, $l
       $http.delete('/api/blogs/' + vm.blogId,config)
           .then(function (response) {
               console.log("Blog deleted:", response.data);
-              // Redirect to blog list page after successful deletion
+            
               $location.path('/blogList');
           })
           .catch(function (error) {
               console.error("Error deleting blog:", error);
-              // Handle error, show user-friendly message if needed
+              
           });
          
   };
 
-  // Function to check if the current user can delete this blog post
   $scope.canDelete = function () {
-      if (!vm.blog || !vm.currentUser) return false; // If no blog or user, cannot delete
-      return vm.blog.author === vm.currentUser.email; // Return true if the current user is the author of the blog
+      if (!vm.blog || !vm.currentUser) return false; 
+      return vm.blog.author === vm.currentUser.email; 
   };
 });
 
@@ -270,7 +267,7 @@ app.controller('LoginController', ['$scope', '$location', 'authentication', func
           })
           .catch(function (err) {
               vm.formError = "Invalid Username or Password, try again.";
-              // Optionally, you can clear the credentials to prevent auto-fill
+        
               vm.credentials.email = "";
               vm.credentials.password = "";
           });
@@ -319,7 +316,7 @@ app.controller('RegisterController', ['$http', '$location', 'authentication', fu
             .catch(function (err) {
                 console.log("in error");
                 vm.formError = "Error registering. Try again with a different email address."
-                //vm.formError = err;
+                
             });
 
 
@@ -379,14 +376,13 @@ function authentication($window, $http) {
         if (token) {
             try {
                 var payload = JSON.parse($window.atob(token.split('.')[1]));
-                // Check if the token expiration time (exp) is greater than the current time
                 return payload.exp > (Date.now() / 1000);
             } catch (error) {
                 console.error('Error decoding token payload:', error);
-                return false; // Handle decoding error gracefully
+                return false;
             }
         } else {
-            return false; // No token found
+            return false; 
         }
     };
 
