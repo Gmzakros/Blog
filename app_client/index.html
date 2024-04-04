@@ -34,12 +34,14 @@
           <div ng-repeat="blog in vm.blogs" class="blogListing">
               <h2>
                   <span class="author" id="AuthorName">{{ blog.author }}</span>
+
                   <span class="date">{{ blog.date }}</span>
               </h2>
               <div class="innerContainer">
                   <h3>{{ blog.blogTitle }}</h3>
                   <p>{{ blog.blogText }}</p>
               </div>
+              
               <p align="right" ng-if=canEdit(blog);>
                   <a  href="#!/blogEdit/{{ blog._id }}">
                     <button id="editBtn"><i class="material-icons">Edit</i></button>
