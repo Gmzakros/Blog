@@ -67,6 +67,7 @@ module.exports.blogsUpdateOne = function (req, res) {
                     sendJSONresponse(res, 400, err);
                     return;
                 }
+                blog.email = req.body.email;
                 blog.author = req.body.author;
                 blog.blogTitle = req.body.blogTitle;
                 blog.blogText = req.body.blogText;
@@ -128,6 +129,7 @@ var buildBlogList = function (req, res, results) {
     results.forEach(function (obj) {
         blogs.push({
             _id: obj._id,
+            email: obj.email,
             author: obj.author,
             blogTitle: obj.blogTitle,
             blogText: obj.blogText,

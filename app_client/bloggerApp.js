@@ -102,7 +102,7 @@ app.controller('BlogListController', function BlogListController($scope, $http, 
       });
 
   $scope.canEdit = function (blog) {
-      return blog.author === vm.currentUser.email;
+      return blog.email === vm.currentUser.email;
   };
 });
 
@@ -116,7 +116,8 @@ app.controller('BlogAddController', ['$scope', '$location', '$http', 'authentica
     $scope.submit = function () {
         let today = new Date();
         var blogData = {
-            author: vm.currentUser.email,
+            email: vm.currentUser.email,
+            author: vm.currentUser.name,
             blogTitle: $scope.bTitle,
             blogText: $scope.bText,
             date: `${today.getMonth() + 1}-${today.getDate()}-${today.getFullYear()}`
@@ -330,18 +331,18 @@ app.service('authentication', authentication);
 authentication.$inject = ['$window', '$http'];
 function authentication($window, $http) {
     var saveToken = function (token) {
-        $window.localStorage['blog-token'] = token;
+        $window.sessionStorage['blog-token'] = token;
     };
 
     var getToken = function () {
-        return $window.localStorage['blog-token'];
+        return $window.sessionStorage['blog-token'];
     };
 
     var saveUser = function (user) {
-        $window.localStorage['blog-user'] = JSON.stringify(user);
+        $window.sessionStorage['blog-user'] = JSON.stringify(user);
     };
     var getUser = function () {
-        return JSON.parse($window.localStorage['blog-user'] || '{}');
+        return JSON.parse($window.sessionStorage['blog-user'] || '{}');
     };
 
     var register = function (user) {
@@ -367,7 +368,7 @@ function authentication($window, $http) {
     };
 
     var logout = function () {
-        $window.localStorage.removeItem('blog-token');
+        $window.sessionStorage.removeItem('blog-token');
 
     };
 
