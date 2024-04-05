@@ -3,24 +3,24 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 
 <head>
-  <script src="/lib/angular.min.js"></script>
-  <script src="/lib/angular-route.min.js"></script>
+    <script src="/lib/angular.min.js"></script>
+    <script src="/lib/angular-route.min.js"></script>
 
 </head>
 
 <body>
 
-  <div class="topnav" id="navbar" ng-controller="NavbarController">
-    <a href="#!/home" id="homeTab">My Blog</a>
-    <a href="#!/blogList" id="blogListTab">List Blogs</a>
-    <a ng-if="currentUser" href="#!/blogAdd" id="blogAddTab">Add Blogs</a>
-    <div class="navbar-right">
-      <a ng-click="toggleAuth()" ng-if="!currentUser" href="#!/Login">Login</a>
-      <a ng-click="toggleAuth()" ng-if="currentUser">Logout ({{ currentUser.email }})</a>
+    <div class="topnav" id="navbar" ng-controller="NavbarController">
+        <a href="#!/home" id="homeTab">My Blog</a>
+        <a href="#!/blogList" id="blogListTab">List Blogs</a>
+        <a ng-if="currentUser" href="#!/blogAdd" id="blogAddTab">Add Blogs</a>
+        <div class="navbar-right">
+            <a ng-click="toggleAuth()" ng-if="!currentUser" href="#!/Login">Login</a>
+            <a ng-click="toggleAuth()" ng-if="currentUser">Logout ({{ currentUser.email }})</a>
+        </div>
     </div>
-  </div>
 
-  <script type="text/ng-template" id="pages/home.html">
+    <script type="text/ng-template" id="pages/home.html">
     <div>
       <p></p>
       <h2 ng-if="currentUser">{{ currentUser.name }}'s Blogs</h2>
@@ -53,10 +53,10 @@
           </div>
       </div>
   </script>
-  
 
 
-  <script type="text/ng-template" id="pages/blogAdd.html">
+
+    <script type="text/ng-template" id="pages/blogAdd.html">
     <p>
         <div class="blogAdd">
             <form class="blogAddForm" method="POST" ng-submit="submit()">
@@ -72,7 +72,7 @@
     </p>
 </script>
 
-  <script type="text/ng-template" id="pages/blogEdit.html">
+    <script type="text/ng-template" id="pages/blogEdit.html">
             <div style="padding-top: 20px;">
 
                 <div class="blogAdd">
@@ -89,7 +89,7 @@
                 </div>
         </script>
 
-  <script type="text/ng-template" id="pages/blogDelete.html">
+    <script type="text/ng-template" id="pages/blogDelete.html">
             <div style="padding-top: 20px;">
                 <div class="blogAdd">
                     <form class="blogAddForm" method="POST" ng-submit="deleteBlog()">
@@ -105,7 +105,7 @@
                 </div>
         </script>
 
-        <script type="text/ng-template" id="pages/Login.html">
+    <script type="text/ng-template" id="pages/Login.html">
           <div class="login-container">
               <div class="red-box">
                   <h2>{{ vm.pageHeader.title }}</h2>
@@ -129,10 +129,10 @@
               </div>
           </div>
       </script>
-      
-      
 
-      <script type="text/ng-template" id="pages/Register.html">
+
+
+    <script type="text/ng-template" id="pages/Register.html">
         <div class="login-container">
         <div class="red-box container">
             <h2>{{ vm.pageHeader.title }}</h2>
@@ -158,10 +158,10 @@
         </div>
       </div>
     </script>
-    
-  <div ng-view></div>
-  >
-  <script src="bloggerApp.js"></script>
+
+    <div ng-view></div>
+
+    <script src="bloggerApp.js"></script>
 
 
 
