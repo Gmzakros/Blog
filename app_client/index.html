@@ -15,8 +15,10 @@
         <a href="#!/blogList" id="blogListTab">List Blogs</a>
         <a ng-if="currentUser" href="#!/blogAdd" id="blogAddTab">Add Blogs</a>
         <div class="navbar-right">
+            <a ng-if = "currentUser" href= "#!/friends"> Friends</a>
             <a ng-click="toggleAuth()" ng-if="!currentUser" href="#!/Login">Login</a>
             <a ng-click="toggleAuth()" ng-if="currentUser">Logout ({{ currentUser.email }})</a>
+            
         </div>
     </div>
 
@@ -157,6 +159,33 @@
             </form>
         </div>
       </div>
+    </script>
+
+    <script type="text/ng-template" id="pages/friends.html">
+
+          
+        <div class="friends-container">
+            <div class="friend-request-box">
+                <h2>Send Friend Request</h2>
+                <form ng-submit="sendFriendRequest()">
+                  <label for="email">Friend's Email:</label>
+                  <input type="email" id="email" ng-model="friendEmail" required>
+                  <button type="submit">Send Request</button>
+                </form>
+              </div>
+            <h2>Your Friends</h2>
+            <div class="red-box container">
+                <div class="FriendsList">
+                    <div ng-repeat="friend in vm.friends" class="FriendItem">
+                        <div class="friend-box">
+                            <h3>{{ friend.name }}</h3>
+                            <h3>{{ friend.email }}</h3>
+                            <button ng-click="removeFriend(friend)" class="remove-button">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </script>
 
     <div ng-view></div>

@@ -17,7 +17,8 @@ module.exports.register = function (req, res) {
 
   var user = new User({
     name: req.body.name,
-    email: req.body.email
+    email: req.body.email,
+    friends: []
   });
 
   user.setPassword(req.body.password);
@@ -61,4 +62,43 @@ module.exports.login = function (req, res) {
       sendJSONresponse(res, 401, info);
     }
   })(req, res);
+};
+
+
+module.exports.friends = function (req, res) {
+  console.log('Friends list for user with email:', req.params.userEmail);
+
+  var userEmail = req.params.userEmail;
+
+  User.findOne({ email: userEmail }, function(err, user) {
+    if (err) {
+      console.error('Error finding user:', err);
+      sendJSONresponse(res, 500, { message: 'Internal server error' });
+      return;
+    }
+
+    if (!user) {
+      sendJSONresponse(res, 404, { message: 'User not found' });
+      return;
+    }
+
+    var userFriends = user.friends;
+
+    User.find({ email: { $in: userFriends } }, 'name email', function(err, friendUsers) {
+      if (err) {
+        console.error('Error finding friends:', err);
+        sendJSONresponse(res, 500, { message: 'Internal server error' });
+        return;
+      }
+
+      var friendsList = friendUsers.map(function(friend) {
+        return {
+          email: friend.email,
+          name: friend.name
+        };
+      });
+
+      sendJSONresponse(res, 200, friendsList);
+    });
+  });
 };

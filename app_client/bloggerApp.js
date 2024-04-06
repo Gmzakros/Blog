@@ -37,6 +37,11 @@ app.config(function ($routeProvider) {
             controller: 'RegisterController',
             controllerAs: 'vm'
         })
+        .when('/friends', {
+            templateUrl: 'pages/friends.html',
+            controller: 'friendsController',
+            controllerAs: 'vm'
+        })
         .otherwise({redirectTo: '/home'});
 
 
@@ -325,6 +330,39 @@ app.controller('RegisterController', ['$http', '$location', 'authentication', fu
     };
 }]);
 
+app.controller('friendsController', ['$http', '$routeParams', '$scope', '$location', 'authentication', function friendsController($http, $routeParams, $scope, $location, authentication) {
+    var vm = this;
+
+    var loadFriends = function(currentUser) {
+        $http.get('/api/friends/' + currentUser.email)
+          .then(function (response) {
+              vm.friends = response.data;
+              vm.message = "";
+          })
+          .catch(function (error) {
+              vm.message = "Error loading blog list";
+              console.error("Error loading blog list:", error);
+          });
+    };
+
+    var currentUser = authentication.currentUser();
+    
+   
+    if (currentUser) {
+       
+        loadFriends(currentUser);
+    } else {
+        $scope.$watch(function () {
+            return authentication.currentUser();
+        }, function (newUser) {
+            if (newUser) {
+                loadFriends(newUser);
+            }
+        }, true);
+    }
+}]);
+
+
 
 
 app.service('authentication', authentication);
@@ -397,6 +435,9 @@ function authentication($window, $http) {
                 email: payload.email,
                 name: payload.name
             };
+        }
+        else {
+            return null;
         }
     };
     return {

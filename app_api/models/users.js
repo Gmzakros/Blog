@@ -15,7 +15,11 @@ var userSchema = new mongoose.Schema({
     required: true
   },
   hash: String,
-  salt: String
+  salt: String,
+  friends: [{
+    type: String,
+    unique: true 
+  }]
 });
 
 // Methods for Users Schema

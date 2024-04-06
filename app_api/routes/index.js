@@ -18,4 +18,6 @@ router.delete('/blogs/:blogid', auth, ctrlBlogs.blogsDeleteOne);
 router.post('/register', ctrlAuth.register);  // Lab 6
 router.post('/login', ctrlAuth.login);  // Lab 6
 
+router.get('/friends/:userEmail', ctrlAuth.friends);
+
 module.exports = router;
