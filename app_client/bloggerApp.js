@@ -42,6 +42,12 @@ app.config(function ($routeProvider) {
             controller: 'friendsController',
             controllerAs: 'vm'
         })
+        .when('/chat/:friendEmail',
+        {
+            templateUrl: 'pages/chat.html',
+            controller: 'ChatController',
+            controllerAs: 'vm'
+        })
         .otherwise({redirectTo: '/home'});
 
 
@@ -295,7 +301,9 @@ app.controller('RegisterController', ['$http', '$location', 'authentication', fu
     vm.credentials = {
         name: "",
         email: "",
-        password: ""
+        password: "",
+        friends: [],
+        friendRequests: []
     };
 
     vm.returnPage = $location.search().page || '/';
@@ -330,13 +338,152 @@ app.controller('RegisterController', ['$http', '$location', 'authentication', fu
     };
 }]);
 
-app.controller('friendsController', ['$http', '$routeParams', '$scope', '$location', 'authentication', function friendsController($http, $routeParams, $scope, $location, authentication) {
+app.controller('friendsController', ['$http', '$routeParams', '$scope', '$location', 'authentication', '$interval', function friendsController($http, $routeParams, $scope, $location, authentication, $interval) {
     var vm = this;
 
-    var loadFriends = function(currentUser) {
-        $http.get('/api/friends/' + currentUser.email)
+
+    var loadFriendRequestsPeriodically = function() {
+        var currentUserEmail = authentication.currentUser().email;
+        $http.get('/api/friendRequests/' + currentUserEmail)
+          .then(function (response) {
+              vm.friendRequests = response.data;
+              vm.message = "";
+          })
+          .catch(function (error) {
+              vm.message = "Error loading friend requests";
+              console.error("Error loading friend requests:", error);
+          });
+    };
+
+    var friendRequestsPolling = $interval(loadFriendRequestsPeriodically, 3000);
+
+    $scope.$on('$destroy', function() {
+        if (angular.isDefined(friendRequestsPolling)) {
+            $interval.cancel(friendRequestsPolling);
+            friendRequestsPolling = undefined;
+        }
+    });
+
+
+    $scope.openChat = function(friend) {
+        
+        var requestData = {
+            messageContent: '', 
+            friendEmail: friend.email,
+            userEmail: currentUserEmail
+        };
+
+        $http.post('/api/chats/' + currentUserEmail + '/' + friend.email, requestData)
+            .then(function(response) {
+                console.log('Chat created:', response.data);
+            })
+            .catch(function(error) {
+                console.error('Error creating chat:', error);
+            });
+        
+            $http.get('/api/chats/' + currentUserEmail + '/' + friend.email)
+            .then(function(response) {
+                console.log('getting Messages:', response.data);
+            })
+            .catch(function(error) {
+                console.error('Error getting Messages:', error);
+            });
+            
+        $location.path('/chat/' + friend.email);
+    };
+
+    vm.acceptFriendRequest = function(friend) {
+        var currentUserEmail = authentication.currentUser().email;
+        
+        $http.post('/api/friendRequests/' + currentUserEmail, { friendEmail: friend.email })
+            .then(function(response) {
+                console.log("Friend request accepted:", response.data);
+                console.log("Friend email:", friend.email);
+
+                $http.delete('/api/friendRequests/' + currentUserEmail, {
+                    headers: { 'Content-Type': 'application/json' },
+                    data: { friendEmail: friend.email }
+                })
+                .then(function(response) {
+                    console.log("Friend request removed:", response.data);
+                    loadFriends(currentUserEmail);
+                    loadFriendRequests(currentUserEmail);
+                })
+                .catch(function(error) {
+                    console.error("Error removing friend request:", error);
+                });
+            })
+            .catch(function(error) {
+                console.error("Error accepting friend request:", error);
+            });
+    };
+    
+    vm.denyFriendRequest = function(friend) {
+        var currentUserEmail = authentication.currentUser().email;
+        
+        $http.delete('/api/friendRequests/' + currentUserEmail, {
+            headers: { 'Content-Type': 'application/json' },
+            data: { friendEmail: friend.email }
+        })
+            .then(function(response) {
+                console.log("Friend request removed:", response.data);
+                loadFriends(currentUserEmail);
+                loadFriendRequests(currentUserEmail);
+            })
+            .catch(function(error) {
+                console.error("Error removing friend request:", error);
+            });
+
+            };
+
+        vm.sendRequest= function(friend) {
+            console.log(friend);
+            $http.post('/api/friends/' + currentUserEmail, { friendEmail: friend })
+            .then(function(response) {
+                console.log("Friend request removed:", response.data);
+                loadFriends(currentUserEmail);
+                loadFriendRequests(currentUserEmail);
+            })
+            .catch(function(error) {
+                console.error("Error removing friend request:", error);
+            });
+
+            
+        };
+        vm.removeFriend = function(friend){
+            console.log(friend);
+            $http.delete('/api/friends/' + currentUserEmail, {
+                headers: { 'Content-Type': 'application/json' },
+                data: { friendEmail: friend.email }
+            })
+            .then(function(response){
+                console.log(response);
+                vm.friends = response.data;
+                vm.message = "";
+            })
+            .catch(function(error) {
+                vm.message = "Error";
+                console.error("error:", error);
+            });
+            loadFriends(currentUserEmail);
+        };
+        var loadFriends = function(currentUserEmail) {
+        $http.get('/api/friends/' + currentUserEmail)
           .then(function (response) {
               vm.friends = response.data;
+              vm.message = "";
+          })
+          .catch(function (error) {
+              vm.message = "Error loading friend list";
+              console.error("Error loading friend list:", error);
+          });
+    };
+
+    var loadFriendRequests = function(currentUserEmail) { 
+        $http.get('/api/friendRequests/' + currentUserEmail) 
+          .then(function (response) {
+                console.log(response)
+              vm.friendRequests = response.data;
               vm.message = "";
           })
           .catch(function (error) {
@@ -344,23 +491,56 @@ app.controller('friendsController', ['$http', '$routeParams', '$scope', '$locati
               console.error("Error loading blog list:", error);
           });
     };
-
-    var currentUser = authentication.currentUser();
     
-   
-    if (currentUser) {
-       
-        loadFriends(currentUser);
-    } else {
-        $scope.$watch(function () {
-            return authentication.currentUser();
-        }, function (newUser) {
-            if (newUser) {
-                loadFriends(newUser);
-            }
-        }, true);
-    }
+    var currentUserEmail = authentication.currentUser().email;
+    loadFriends(currentUserEmail);
+    loadFriendRequests(currentUserEmail);
+
 }]);
+
+
+app.controller('ChatController', ['$http', '$routeParams', '$scope', '$location', 'authentication', '$interval', function ChatController($http, $routeParams, $scope, $location, authentication, $interval) {
+    var vm = this;
+    vm.friendEmail = $routeParams.friendEmail;
+     vm.currentUserEmail = authentication.currentUser().email;
+
+    vm.getMessages = function() {
+        $http.get('/api/chats/' + vm.currentUserEmail + '/' + vm.friendEmail)
+            .then(function(response) {
+                vm.messages = response.data.messages; 
+                console.log('Messages received:', vm.messages);
+            })
+            .catch(function(error) {
+                console.error('Error retrieving messages:', error);
+            });
+    };
+
+    vm.getMessages();
+
+    var messagesUpdateInterval = $interval(vm.getMessages, 3000);
+
+    vm.sendMessage = function(message) {
+        var requestData = {
+            sender: vm.currentUserEmail, 
+            content: message
+        };
+    
+        $http.post('/api/chatSend/' + vm.currentUserEmail + '/' + vm.friendEmail, requestData)
+            .then(function(response) {
+                console.log('Message sent:', response.data);
+                vm.getMessages();
+                vm.message = ''; 
+            })
+            .catch(function(error) {
+                console.error('Error sending message:', error);
+            });
+    };
+
+    $scope.$on('$destroy', function() {
+        $interval.cancel(messagesUpdateInterval);
+    });
+}]);
+
 
 
 
@@ -433,7 +613,7 @@ function authentication($window, $http) {
             var payload = JSON.parse($window.atob(token.split('.')[1]));
             return {
                 email: payload.email,
-                name: payload.name
+                name: payload.name,
             };
         }
         else {
