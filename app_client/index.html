@@ -5,6 +5,10 @@
 <head>
     <script src="/lib/angular.min.js"></script>
     <script src="/lib/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.2.0/angular-material.min.js"></script>
 
 </head>
 
@@ -15,8 +19,10 @@
         <a href="#!/blogList" id="blogListTab">List Blogs</a>
         <a ng-if="currentUser" href="#!/blogAdd" id="blogAddTab">Add Blogs</a>
         <div class="navbar-right">
+            <a ng-if = "currentUser" href= "#!/friends"> Friends</a>
             <a ng-click="toggleAuth()" ng-if="!currentUser" href="#!/Login">Login</a>
             <a ng-click="toggleAuth()" ng-if="currentUser">Logout ({{ currentUser.email }})</a>
+            
         </div>
     </div>
 
@@ -158,6 +164,72 @@
         </div>
       </div>
     </script>
+
+    <script type="text/ng-template" id="pages/friends.html">
+
+        <div class="main-container">
+            <div class="friends-container">
+                <div class="friend-request-box">
+                    <h2>Send Friend Request</h2>
+                    <div>
+                        <input type="email" id="email" ng-model="friendEmail" required>
+                        <button ng-click="vm.sendRequest(friendEmail)" type="submit">Send Request</button>
+                        <p ng-show="vm.requestSent">Friend request sent!</p>
+                    </div>
+                </div>
+                <div class="friends-list-container">
+                    <h2>Your Friends</h2>
+                    <div class="red-box container">
+                        <div class="FriendsList">
+                            <div ng-repeat="friend in vm.friends" class="FriendItem">
+                                <div class="friend-box">
+                                    <h3>{{ friend.name }}</h3>
+                                    <h5 id>{{ friend.email }}</h5>
+                                    <button ng-click="openChat(friend)" class="chat-button">Chat</button>
+                                    <button ng-click="vm.removeFriend(friend)" class="remove-button">Remove</button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="friends-container" id= "friends-container2">
+                <div class="friend-request-box">
+                    <h2>Friend Requests</h2>
+                    <h6>You may need to refresh the page to see updated Friend requests</h6>
+                    <div ng-repeat="friend in vm.friendRequests" class="FriendItem">
+                    <div class="friend-box">
+                        <h3>{{ friend.name }}</h3>
+                        <h5 id>{{ friend.email }}</h5>
+                        <button ng-click="vm.acceptFriendRequest(friend)" id="Accept-Button">Accept</button>
+                        <button ng-click="vm.denyFriendRequest(friend)" id="Deny-Button">Deny</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="pages/chat.html">
+        <div class="main-container">
+            <div class="friends-container">
+                <h2>Chat with {{vm.friendEmail}}</h2>
+                
+                <div class="red-box container">
+                    <div class="messages-container" id="messagesContainer">
+                        <div class="message" ng-repeat="message in vm.messages" ng-class="{ 'own-message': message.sender === vm.currentUserEmail }">
+                            <p>{{ message.sender }}</p>
+                            <p>{{ message.content }}</p>
+                        </div>
+                    </div>
+                </div>
+                <input id="messageBox" ng-model="vm.message" autocomplete="off">
+                <button ng-click="vm.sendMessage(vm.message)" id="Send-Button">Send</button>
+            </div>
+        </div>
+    </script>
+
+    
 
     <div ng-view></div>
 
